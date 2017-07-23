@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.huawei.deviceviewer.dao.DeviceDao">
+
+	<resultMap id="device" type="Device">
+		<id property="id" column="ID" />
+		<result property="name" column="DeviceName" />
+	</resultMap>
+
+	<insert id="add" parameterType="Device">
+		INSERT INTO DV_Device
+		(
+			ID,
+			DeviceName
+		)
+		VALUES
+		(
+			#{id},
+			#{name}
+		)
+	</insert>
+
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE FROM DV_Device WHERE
+		ID=#{id}
+	</delete>
+
+	<update id="update" parameterType="Device">
+		UPDATE DV_Device SET
+		DeviceName=#{name}
+		WHERE ID=#{id}
+	</update>
+	
+	<select id="load" parameterType="java.lang.Integer" resultMap="device">
+		SELECT * FROM DV_Device WHERE ID=#{id}
+	</select>
+
+	<select id="loadAll" resultMap="device">
+		SELECT * FROM DV_Device
+	</select>
+
+</mapper>
