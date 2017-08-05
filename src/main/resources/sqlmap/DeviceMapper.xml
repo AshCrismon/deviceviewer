@@ -8,18 +8,37 @@
 	<resultMap id="device" type="Device">
 		<id property="id" column="ID" />
 		<result property="name" column="DeviceName" />
+		<result property="ips" column="DeviceIPs" />
+		<result property="type" column="DeviceType" />
+		<result property="occupier" column="Occupier" />
+		<result property="beginTime" column="BeginTime" />
+		<result property="endTime" column="EndTime" />
+		<result property="isOccupied" column="IsOccupied" />
+		<result property="status" column="Status" />
 	</resultMap>
 
-	<insert id="add" parameterType="Device">
+	<insert id="insert" parameterType="Device">
 		INSERT INTO DV_Device
 		(
-			ID,
-			DeviceName
+			DeviceName,
+			DeviceIPs,
+			DeviceType,
+			Occupier,
+			BeginTime,
+			EndTime,
+			IsOccupied,
+			Status
 		)
 		VALUES
 		(
-			#{id},
-			#{name}
+			#{name},
+			#{ips},
+			#{type},
+			#{occupier},
+			#{beginTime},
+			#{endTime},
+			#{isOccupied},
+			#{status}
 		)
 	</insert>
 
@@ -30,7 +49,14 @@
 
 	<update id="update" parameterType="Device">
 		UPDATE DV_Device SET
-		DeviceName=#{name}
+		DeviceName=#{name},
+		DeviceIPs=#{ips},
+		DeviceType=#{type},
+		Occupier=#{occupier},
+		BeginTime=#{beginTime},
+		EndTime=#{endTime},
+		IsOccupied=#{isOccupied},
+		Status=#{status}
 		WHERE ID=#{id}
 	</update>
 	

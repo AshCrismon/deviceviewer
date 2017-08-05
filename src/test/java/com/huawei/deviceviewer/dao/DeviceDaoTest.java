@@ -15,22 +15,22 @@ public class DeviceDaoTest extends AbstractTestConfig {
 
 	@Test
 	public void testAdd(){
-		Device device = new Device(1, "anonymous");
-		int effectedLines = deviceDao.add(device);
+		Device device = new Device("18000V1R1", "anonymous", "8.46.47.101/102", 1, "s00423985");
+		int effectedLines = deviceDao.insert(device);
 		Assert.assertEquals(1, effectedLines);
 	}
 
 	@Test
 	public void testDelete(){
-		Device device = new Device(2, "anonymous");
-		deviceDao.add(device);
+		Device device = new Device("18000V1R1", "anonymous", "8.46.47.101/102", 1, "s00423985");
+		deviceDao.insert(device);
 		int effectedLines = deviceDao.delete(device.getId());
 		Assert.assertEquals(1, effectedLines);
 	}
 
 	@Test
 	public void testUpdate(){
-		Device device = new Device(1, "anonymous2");
+		Device device = new Device("18000V1R1", "anonymous", "8.46.47.101/102", 1, "s00423985");
 		int effectedLines = deviceDao.update(device);
 		Assert.assertEquals(1, effectedLines);
 	}
