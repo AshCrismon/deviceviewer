@@ -2,7 +2,7 @@
  * Created by Yadi.Sun on 2017/7/30.
  */
 
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
     /*
      Fullscreen background
@@ -12,13 +12,13 @@ jQuery(document).ready(function() {
     /*
      Form validation
      */
-    $('.login-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function() {
+    $('.login-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function () {
         $(this).removeClass('input-error');
     });
 
 });
 
-function login(){
+function login() {
     var username = $('.login-form .form-username').val();
     var password = $('.login-form .form-password').val();
     var data = {"username": username, "password": password};
@@ -27,17 +27,15 @@ function login(){
             url: "/deviceviewer/user/login",
             data: data,
             dataType: "json",
-            success: function(result, status, xhr){
-                console.log(result);
-                window.location.href = "/deviceviewer/index.html";
-                if(result.status === "true"){
+            success: function (result, status, xhr) {
+                if (result.status === "true") {
                     console.log("login success!");
-
-                }else{
+                    window.location.href = "/deviceviewer/views/index.html";
+                } else {
                     console.log("login failed!");
                 }
             }
-            
+
         }
     );
 }

@@ -1,6 +1,7 @@
 package com.huawei.deviceviewer.service;
 
 import com.huawei.deviceviewer.entity.Device;
+import com.huawei.deviceviewer.entity.Page;
 
 import java.util.List;
 
@@ -22,5 +23,9 @@ public interface DeviceService {
 
     public List<Device> loadAll();
 
+    public Page<Device> loadByPage(int pageNo, int pageSize);
+
     public void applyDevice(int id, String username, String beginTime, String endTime);
+
+    public void cancelDevice(int id, String username);
 }

@@ -3,44 +3,10 @@
 <head>
     <meta http-equiv="content-Type" content="text/html; charset=utf-8"/>
     <!-- CSS -->
-    <link rel="stylesheet" href="./css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="./css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" href="/deviceviewer/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/deviceviewer/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" href="/deviceviewer/css/index.css"/>
     <title>test page</title>
-
-    <style>
-
-        nav.navbar .navbar-header{
-            margin-left: -104px;
-        }
-
-        div.panel.panel-default {
-            position: relative !important;
-            width: 70% !important;
-            left: 15% !important;
-            top: 75px !important;
-        }
-
-        table thead th {
-            font-weight: bold !important;
-        }
-
-        table tbody tr td {
-            vertical-align: middle !important;
-        }
-
-        div.modal form {
-            padding-left: 13% !important;
-        }
-
-        div.modal form .form-group{
-            margin-right: -90px !important;
-        }
-
-        div.modal form .field-hidden{
-            display: none !important;
-        }
-
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -61,6 +27,14 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="logout">退出</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
@@ -72,7 +46,7 @@
         <th>设备类型</th>
         <th>设备名</th>
         <th>设备IPs</th>
-        <th>是否占用</th>
+        <th>状态</th>
         <th>占用人</th>
         <th>起始时间</th>
         <th>结束时间</th>
@@ -81,16 +55,30 @@
         <tbody>
         </tbody>
         <tfoot>
-
         </tfoot>
     </table>
+
 </div>
+<nav class="page">
+    <ul class="pagination">
+        <li>
+            <a aria-label="Previous" class="previous">
+                <span aria-hidden="true">上一页</span>
+            </a>
+        </li>
+        <li>
+            <a aria-label="Next" class="next">
+                <span aria-hidden="true">下一页</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 
 <div class="modal fade" id="modal-device">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="close" data-dismiss="modal">
+                <button class="close btn-close" data-dismiss="modal">
                     <span>x</span>
                     <span class="sr-only">关闭</span>
                 </button>
@@ -132,8 +120,8 @@
                         <label class="col-sm-2 control-label">起始时间</label>
                         <div class="col-sm-6">
                             <div class="input-group date form-datetime" data-date="">
-                                <input class="form-control input-begin-time" size="16" type="text" value="">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <input class="form-control input-begin-time" size="16" type="text" value="" />
                             </div>
                         </div>
                     </div>
@@ -141,8 +129,8 @@
                         <label class="col-sm-2 control-label">结束时间</label>
                         <div class="col-sm-6">
                             <div class="input-group date form-datetime" data-date="">
-                                <input class="form-control input-end-time" size="16" type="text" value="">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                <input class="form-control input-end-time" size="16" type="text" value="" />
                             </div>
                         </div>
                     </div>
@@ -155,10 +143,11 @@
     </div>
 </div>
 
-<script src="./js/jquery-2.2.2.min.js"></script>
-<script src="./js/bootstrap.min.js"></script>
-<script src="./js/bootstrap-datetimepicker.min.js"></script>
-<script src="./js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="./js/device.js"></script>
+<script src="/deviceviewer/js/jquery-2.2.2.min.js"></script>
+<script src="/deviceviewer/js/bootstrap.min.js"></script>
+<script src="/deviceviewer/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/deviceviewer/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/deviceviewer/js/index.js"></script>
+<script src="/deviceviewer/js/paginate.js"></script>
 </body>
 </html>

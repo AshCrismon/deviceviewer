@@ -68,4 +68,12 @@
 		SELECT * FROM DV_Device
 	</select>
 
+	<select id="loadPage" resultMap="device">
+		SELECT * FROM DV_Device LIMIT #{0},#{1}
+	</select>
+
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM DV_Device
+	</select>
+
 </mapper>

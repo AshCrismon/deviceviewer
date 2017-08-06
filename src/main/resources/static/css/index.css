@@ -1,0 +1,41 @@
+nav.navbar .navbar-header {
+    margin-left: -104px;
+}
+
+div.panel.panel-default {
+    position: relative !important;
+    width: 70% !important;
+    left: 15% !important;
+    top: 75px !important;
+}
+
+table thead th {
+    font-weight: bold !important;
+}
+
+table tbody tr td {
+    vertical-align: middle !important;
+}
+
+div.modal form {
+    padding-left: 13% !important;
+}
+
+div.modal form .form-group {
+    margin-right: -90px !important;
+}
+
+div.modal form .field-hidden {
+    display: none !important;
+}
+
+nav ul.pagination {
+    width: 50% !important;
+    margin-left: 70% !important;
+    margin-top: 75px !important;
+}
+
+ul.pagination li,
+ul li .logout{
+    cursor: pointer !important;
+}

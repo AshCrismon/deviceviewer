@@ -1,10 +1,6 @@
 package com.huawei.deviceviewer.controller;
 
-import com.huawei.deviceviewer.entity.Device;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Intellij IDEA.

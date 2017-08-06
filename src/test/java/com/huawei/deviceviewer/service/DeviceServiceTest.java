@@ -20,14 +20,26 @@ public class DeviceServiceTest extends AbstractTestConfig{
 
     @Test
     public void testInsertDevice(){
-        Device device1 = new Device("18000V1R1", "anonymous", "8.46.47.101/102", 1, "s00423985");
-        Device device2 = new Device("18000V1R1", "anonymous", "8.46.47.103/104", 1, "s00423985");
-        Device device3 = new Device("18000V1R1", "anonymous", "8.46.47.194/195", 0, "");
-        Device device4 = new Device("18000V1R1", "anonymous", "8.46.47.132/133", 0, "");
+        Device device1 = new Device("18000V2R2", "anonymous", "8.46.47.145/146", 0, "");
+        Device device2 = new Device("18000V2R2", "anonymous", "8.46.47.157/158", 0, "");
+        Device device3 = new Device("18000V2R2", "anonymous", "8.46.47.182/183", 0, "");
+        Device device4 = new Device("18000V2R2", "anonymous", "8.46.47.168/169", 0, "");
+        Device device5 = new Device("18000V2R2", "anonymous", "8.46.47.171/172", 0, "");
+        Device device6 = new Device("18000V2R2", "anonymous", "8.46.47.182/183", 0, "");
+        Device device7 = new Device("18000V2R2", "anonymous", "8.46.47.191/192", 0, "");
+        Device device8 = new Device("18000V2R2", "anonymous", "8.46.47.221/222", 0, "");
+        Device device9 = new Device("18000V2R2", "anonymous", "8.46.47.242/243", 0, "");
+        Device device10 = new Device("18000V2R2", "anonymous", "8.46.47.56/57", 0, "");
         deviceService.insertDevice(device1);
         deviceService.insertDevice(device2);
         deviceService.insertDevice(device3);
         deviceService.insertDevice(device4);
+        deviceService.insertDevice(device5);
+        deviceService.insertDevice(device6);
+        deviceService.insertDevice(device7);
+        deviceService.insertDevice(device8);
+        deviceService.insertDevice(device9);
+        deviceService.insertDevice(device10);
     }
 
     @Test

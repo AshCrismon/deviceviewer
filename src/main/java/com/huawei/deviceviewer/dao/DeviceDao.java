@@ -22,4 +22,8 @@ public interface DeviceDao {
 
 	public List<Device> loadAll();
 
+	public List<Device> loadPage(int start, int limit);
+
+	public int count();
+
 }

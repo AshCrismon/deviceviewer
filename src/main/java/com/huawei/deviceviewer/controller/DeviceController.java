@@ -1,8 +1,10 @@
 package com.huawei.deviceviewer.controller;
 
 import com.huawei.deviceviewer.entity.Device;
+import com.huawei.deviceviewer.entity.Page;
 import com.huawei.deviceviewer.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,8 +33,18 @@ public class DeviceController {
     public Map<String, Object> loadAllDevices(HttpSession session) {
         String username = (String) session.getAttribute("sessionId");
         List<Device> deviceList = deviceService.loadAll();
-        List<Map<String, Object>> wrapedDeviceList = wrapDeviceList(deviceList, username);
-        return renderMessage("true", wrapedDeviceList);
+        List<Map<String, Object>> wrappedDeviceList = wrapDeviceList(deviceList, username);
+        return renderMessage("true", wrappedDeviceList);
+    }
+
+    @RequestMapping("/loadPage/{pageNo}")
+    public Map<String, Object> loadDevicesByPage(@PathVariable(value = "pageNo") int pageNo,
+                                                 HttpSession session) {
+        String username = (String) session.getAttribute("sessionId");
+        Page<Device> devicePage = deviceService.loadByPage(pageNo, 10);
+        List<Map<String, Object>> wrappedDeviceList = wrapDeviceList(devicePage.getObjList(), username);
+        Map<String, Object> wrappedDevicePage = wrapDevicePage(devicePage, wrappedDeviceList);
+        return renderMessage("true", wrappedDevicePage);
     }
 
     @RequestMapping("/apply")
@@ -45,11 +57,20 @@ public class DeviceController {
         return renderMessage("true", "申请成功！");
     }
 
+    @RequestMapping("/cancel")
+    public Map<String, Object> cancelDevice(@RequestParam(value = "deviceId") int deviceId,
+                                           HttpSession session) {
+        String username = (String) session.getAttribute("sessionId");
+        deviceService.cancelDevice(deviceId, username);
+        return renderMessage("true", "成功解除占用！");
+    }
+
     public List<Map<String, Object>> wrapDeviceList(List<Device> deviceList, String username) {
-        List<Map<String, Object>> wrapedDeviceList = new ArrayList<>();
+        List<Map<String, Object>> wrappedDeviceList = new ArrayList<>();
 
         for (Device device : deviceList) {
             Map<String, Object> deviceMap = new HashMap<>();
+            deviceMap.put("id", device.getId());
             deviceMap.put("type", device.getType());
             deviceMap.put("name", device.getName());
             deviceMap.put("ips", device.getIps());
@@ -72,11 +93,23 @@ public class DeviceController {
             } else {
                 deviceMap.put("occupierIsMe", 0);
             }
-            wrapedDeviceList.add(deviceMap);
+            wrappedDeviceList.add(deviceMap);
         }
-        return wrapedDeviceList;
+        return wrappedDeviceList;
 
     }
+
+    public Map<String, Object> wrapDevicePage(Page<Device> devicePage, List<Map<String, Object>> wrappedDeviceList) {
+        
+        Map<String, Object> wrappedDevicePage = new HashMap<>();
+        wrappedDevicePage.put("pageNo", devicePage.getPageNo());
+        wrappedDevicePage.put("pageSize", devicePage.getPageSize());
+        wrappedDevicePage.put("totalCount", devicePage.getTotalCount());
+        wrappedDevicePage.put("totalPages", devicePage.getTotalPages());
+        wrappedDevicePage.put("deviceList", wrappedDeviceList);
+        return wrappedDevicePage;
+    }
+
 
     private Map<String, Object> renderMessage(String status, Object msg) {
         message.put("status", status);

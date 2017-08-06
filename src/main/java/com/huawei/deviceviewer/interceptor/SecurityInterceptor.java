@@ -37,7 +37,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
                 redirectTo(response, CONTEXT_PATH + HOME_URL);
                 continueFilter = false;
             }
-        } else if (!(isLoginUrl(request) || isLoginRequest(request))) {
+        } else if (!isLoginUrl(request) && !isLoginRequest(request)) {
             redirectTo(response, CONTEXT_PATH + LOGIN_URL);
             continueFilter = false;
         }
