@@ -53,7 +53,8 @@ function refreshDeviceList(deviceList) {
         var nameTd = $("<td></td>").text(e.name);
         var ipsTd = $("<td></td>").text(e.ips);
         var isOccupiedTd = $("<td></td>").text(e.isOccupied === 0 ? "空闲" : "占用");
-        var occupierTd = $("<td></td>").text(e.occupier);
+        var occupierUsernameTd = $("<td></td>").text(e.occupierUsername);
+        var occupierNameTd = $("<td></td>").text(e.occupierName);
         var beginTimeTd = $("<td></td>").text(e.beginTime);
         var endTimeTd = $("<td></td>").text(e.endTime);
         var applyBtn = $("<a class='btn btn-info'>申请</a>")
@@ -80,7 +81,8 @@ function refreshDeviceList(deviceList) {
             .append(nameTd)
             .append(ipsTd)
             .append(isOccupiedTd)
-            .append(occupierTd)
+            .append(occupierUsernameTd)
+            .append(occupierNameTd)
             .append(beginTimeTd)
             .append(endTimeTd)
             .append(optionTd);
@@ -94,18 +96,18 @@ function applyDeviceModal(tr) {
     var deviceType = $(tr).children().eq(1).text();
     var deviceName = $(tr).children().eq(2).text();
     var deviceIPs = $(tr).children().eq(3).text();
-    var applyOrNot = $(tr).children().eq(8).text() === "申请" ? 1 : 0;
+    var applyOrNot = $(tr).children().eq(9).text();
 
     $("#modal-device .device-id").text(deviceId);
     $("#modal-device .device-type").text(deviceType);
     $("#modal-device .device-name").text(deviceName);
     $("#modal-device .device-ips").text(deviceIPs);
-    $("#modal-device .device-applyOrNot").text(deviceIPs);
+    $("#modal-device .device-applyOrNot").text(applyOrNot);
 
-    if (applyOrNot === 0) {
-        $("#modal-device .form-time").css("display", "none");
-    } else {
+    if (applyOrNot === "申请") {
         $("#modal-device .form-time").css("display", "block");
+    } else {
+        $("#modal-device .form-time").css("display", "none");
     }
 }
 
@@ -133,7 +135,7 @@ function initBindEvent() {
     });
 
     $(".btn-ok").on("click", function(){
-        applyOrCancelDevice($(this).text());
+        applyOrCancelDevice($("#modal-device .device-applyOrNot").text());
     });
 }
 

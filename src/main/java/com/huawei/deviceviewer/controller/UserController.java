@@ -1,5 +1,6 @@
 package com.huawei.deviceviewer.controller;
 
+import com.huawei.deviceviewer.entity.User;
 import com.huawei.deviceviewer.exception.IncorrectCredentialsException;
 import com.huawei.deviceviewer.exception.UnknownAccountException;
 import com.huawei.deviceviewer.service.UserService;
@@ -42,6 +43,17 @@ public class UserController {
     @RequestMapping("/getSession")
     Map<String, Object> getSession(HttpSession session) {
         return renderMessage("true", session.getAttribute("sessionId"));
+    }
+
+    @RequestMapping("/register")
+    Map<String, Object> register(@RequestParam(value = "name") String name,
+                                 @RequestParam(value = "username") String username,
+                                 @RequestParam(value = "password") String password,
+                                 HttpSession session) {
+        User user = new User(name, username, password);
+        userService.insertUser(user);
+        session.setAttribute("sessionId", username);
+        return renderMessage("true", "注册成功！");
     }
 
     private Map<String, Object> loginVerify(String username, String password, HttpSession session) {

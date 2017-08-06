@@ -2,7 +2,9 @@ package com.huawei.deviceviewer.controller;
 
 import com.huawei.deviceviewer.entity.Device;
 import com.huawei.deviceviewer.entity.Page;
+import com.huawei.deviceviewer.entity.User;
 import com.huawei.deviceviewer.service.DeviceService;
+import com.huawei.deviceviewer.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,8 @@ public class DeviceController {
 
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private UserService userService;
     private Map<String, Object> message = new HashMap<>();
 
     @RequestMapping("/list")
@@ -74,7 +78,8 @@ public class DeviceController {
             deviceMap.put("type", device.getType());
             deviceMap.put("name", device.getName());
             deviceMap.put("ips", device.getIps());
-            deviceMap.put("occupier", device.getOccupier());
+            deviceMap.put("occupierUsername", device.getOccupier());
+            deviceMap.put("occupierName", "");
 
             if (!device.getBeginTime().isEmpty() && !device.getEndTime().isEmpty() && device.getBeginTime().compareTo(device.getEndTime()) >= 0) {
                 device.setBeginTime("");
@@ -82,6 +87,11 @@ public class DeviceController {
                 device.setOccupier("");
                 device.setIsOccupied(0);
                 deviceService.updateDevice(device);
+            }
+
+            if(device.getIsOccupied() == 1){
+                User user = userService.loadByUsername(device.getOccupier());
+                deviceMap.put("occupierName", user.getName());
             }
 
             deviceMap.put("beginTime", device.getBeginTime());
