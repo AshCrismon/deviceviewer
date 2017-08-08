@@ -38,7 +38,7 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Override
     public Device loadById(int id) {
-        return null;
+        return deviceDao.load(id);
     }
 
     @Override

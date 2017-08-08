@@ -33,9 +33,17 @@ function login() {
                     window.location.href = "/deviceviewer/views/index.html";
                 } else {
                     console.log("login failed!");
+                    toast(result.msg);
                 }
             }
 
         }
     );
+}
+
+function toast(msg) {
+    $(".alert-danger")
+        .text(msg)
+        .fadeIn(1000)
+        .fadeOut(2000);
 }

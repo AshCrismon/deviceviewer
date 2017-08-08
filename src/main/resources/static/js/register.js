@@ -23,10 +23,12 @@ function register() {
 
     if (name == "" || username == "" || password == "" || repassword == "") {
         toast('信息输入不能为空！');
+        return;
     }
 
     if (password !== repassword) {
         toast('两次密码输入不一致!');
+        return;
     }
 
     var data = {
@@ -46,6 +48,7 @@ function register() {
                     window.location.href = "/deviceviewer/views/index.html";
                 } else {
                     console.log("register failed!");
+                    toast(result.msg);
                 }
             }
     

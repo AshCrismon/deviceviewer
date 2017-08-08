@@ -1,6 +1,7 @@
 package com.huawei.deviceviewer.controller;
 
 import com.huawei.deviceviewer.entity.User;
+import com.huawei.deviceviewer.exception.DuplicateAccountException;
 import com.huawei.deviceviewer.exception.IncorrectCredentialsException;
 import com.huawei.deviceviewer.exception.UnknownAccountException;
 import com.huawei.deviceviewer.service.UserService;
@@ -50,10 +51,21 @@ public class UserController {
                                  @RequestParam(value = "username") String username,
                                  @RequestParam(value = "password") String password,
                                  HttpSession session) {
+        try{
+            validate(username);
+        }catch(Exception ex){
+            return renderMessage("false", ex.getMessage());
+        }
         User user = new User(name, username, password);
         userService.insertUser(user);
         session.setAttribute("sessionId", username);
         return renderMessage("true", "注册成功！");
+    }
+
+    public void validate(String username){
+        if(null != userService.loadByUsername(username)){
+            throw new DuplicateAccountException("用户名已经存在！");
+        }
     }
 
     private Map<String, Object> loginVerify(String username, String password, HttpSession session) {
