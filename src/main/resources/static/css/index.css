@@ -4,9 +4,9 @@ nav.navbar .navbar-header {
 
 div.panel.panel-default {
     position: relative !important;
-    width: 70% !important;
-    left: 15% !important;
-    top: 75px !important;
+    width: 90% !important;
+    left: 5% !important;
+    top: 50px !important;
 }
 
 table thead th {
@@ -36,6 +36,20 @@ nav ul.pagination {
 }
 
 ul.pagination li,
-ul li .logout{
+ul li .logout {
     cursor: pointer !important;
+}
+
+.circle-red {
+    width: 17px;
+    height: 17px;
+    background-color: red;
+    border-radius: 50px;
+}
+
+.circle-green {
+    width: 17px;
+    height: 17px;
+    background-color: #00FF7F;
+    border-radius: 50px;
 }

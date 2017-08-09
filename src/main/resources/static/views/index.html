@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/deviceviewer/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/deviceviewer/css/bootstrap-datetimepicker.min.css"/>
     <link rel="stylesheet" href="/deviceviewer/css/index.css"/>
-    <title>Device Viewer</title>
+    <title>首页</title>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -46,12 +46,15 @@
         <th>ID</th>
         <th>设备类型</th>
         <th>设备名</th>
-        <th>设备IPs</th>
+        <th>设备组</th>
+        <th>主机IPs</th>
+        <th>控制器IPs</th>
         <th>状态</th>
-        <th>占用人工号</th>
         <th>占用人姓名</th>
+        <th>占用人工号</th>
         <th>起始时间</th>
         <th>结束时间</th>
+        <th>备注</th>
         <th>操作</th>
         </thead>
         <tbody>
@@ -113,9 +116,21 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">设备IPs</label>
+                        <label class="col-sm-2 control-label">设备组</label>
                         <div class="col-sm-6">
-                            <span class="form-control device-ips"></span>
+                            <span class="form-control device-group"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">主机IPs</label>
+                        <div class="col-sm-6">
+                            <span class="form-control device-host-ips"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">控制器IPs</label>
+                        <div class="col-sm-6">
+                            <span class="form-control device-controller-ips"></span>
                         </div>
                     </div>
                     <div class="form-group form-time">
@@ -134,6 +149,12 @@
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                 <input class="form-control input-end-time" size="16" type="text" value="" />
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-6">
+                            <span class="form-control device-note"></span>
                         </div>
                     </div>
                 </form>

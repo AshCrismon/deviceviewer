@@ -74,7 +74,7 @@ public class UserController {
         try {
             userService.verifyUser(username, password);
             session.setAttribute("sessionId", username);
-        } catch (UnknownAccountException | IncorrectCredentialsException ex) {
+        } catch (Exception ex) {
             msg = ex.getMessage();
             status = "false";
         }

@@ -8,11 +8,14 @@
 	<resultMap id="device" type="Device">
 		<id property="id" column="ID" />
 		<result property="name" column="DeviceName" />
-		<result property="ips" column="DeviceIPs" />
+		<result property="controllerIPs" column="ControllerIPs" />
 		<result property="type" column="DeviceType" />
 		<result property="occupier" column="Occupier" />
 		<result property="beginTime" column="BeginTime" />
 		<result property="endTime" column="EndTime" />
+		<result property="deviceGroup" column="DeviceGroup" />
+		<result property="deviceHostIPs" column="deviceHostIPs" />
+		<result property="note" column="Note" />
 		<result property="isOccupied" column="IsOccupied" />
 		<result property="status" column="Status" />
 	</resultMap>
@@ -21,22 +24,28 @@
 		INSERT INTO DV_Device
 		(
 			DeviceName,
-			DeviceIPs,
+			ControllerIPs,
 			DeviceType,
 			Occupier,
 			BeginTime,
 			EndTime,
+			DeviceGroup,
+			DeviceHostIPs,
+			Note,
 			IsOccupied,
 			Status
 		)
 		VALUES
 		(
 			#{name},
-			#{ips},
+			#{controllerIPs},
 			#{type},
 			#{occupier},
 			#{beginTime},
 			#{endTime},
+			#{deviceGroup},
+			#{deviceHostIPs},
+			#{note},
 			#{isOccupied},
 			#{status}
 		)
@@ -50,11 +59,14 @@
 	<update id="update" parameterType="Device">
 		UPDATE DV_Device SET
 		DeviceName=#{name},
-		DeviceIPs=#{ips},
+		ControllerIPs=#{controllerIPs},
 		DeviceType=#{type},
 		Occupier=#{occupier},
 		BeginTime=#{beginTime},
 		EndTime=#{endTime},
+		DeviceGroup=#{deviceGroup},
+		DeviceHostIPs=#{deviceHostIPs},
+		Note=#{note},
 		IsOccupied=#{isOccupied},
 		Status=#{status}
 		WHERE ID=#{id}

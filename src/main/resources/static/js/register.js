@@ -1,13 +1,7 @@
 jQuery(document).ready(function () {
-
-    /*
-     Fullscreen background
-     */
+    
     $.backstretch("../img/login_background.jpg");
-
-    /*
-     Form validation
-     */
+    
     $('.register-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function () {
         $(this).removeClass('input-error');
     });
@@ -20,17 +14,8 @@ function register() {
     var username = $("#form-username").val().trim();
     var password = $("#form-password").val().trim();
     var repassword = $("#form-repassword").val().trim();
-
-    if (name == "" || username == "" || password == "" || repassword == "") {
-        toast('信息输入不能为空！');
-        return;
-    }
-
-    if (password !== repassword) {
-        toast('两次密码输入不一致!');
-        return;
-    }
-
+    
+    validate(name, username, password, repassword);
     var data = {
         "name": name,
         "username": username,
@@ -58,9 +43,18 @@ function register() {
 
 }
 
-function toast(msg) {
-    $(".alert-danger")
-        .text(msg)
-        .fadeIn(1000)
-        .fadeOut(2000);
+function validate(name, username, password, repassword){
+    if (name === "" || 
+        username === "" || 
+        password === "" || 
+        repassword === "") {
+        toast('信息输入不能为空！');
+        return;
+    }
+
+    if (password !== repassword) {
+        toast('两次密码输入不一致!');
+        return;
+    }
 }
+

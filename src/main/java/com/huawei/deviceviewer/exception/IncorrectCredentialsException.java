@@ -9,6 +9,6 @@ package com.huawei.deviceviewer.exception;
 public class IncorrectCredentialsException extends RuntimeException{
 
     public IncorrectCredentialsException() {
-        super("Your account or password is wrong!");
+        super("用户名或密码错误!");
     }
 }

@@ -9,11 +9,14 @@ package com.huawei.deviceviewer.entity;
 public class Device {
     private int id;
     private String name = "";
-    private String ips = "";
+    private String controllerIPs = "";
     private String type = "";
     private String occupier = "";
     private String beginTime = "";
     private String endTime = "";
+    private String deviceGroup = "";
+    private String deviceHostIPs = "";
+    private String note = "";
     private int isOccupied = 0;
     private int status = 1;
 
@@ -22,8 +25,48 @@ public class Device {
     public Device(String type, String name, String ips, int isOccupied, String occupier) {
         this.type = type;
         this.name = name;
-        this.ips = ips;
+        this.controllerIPs = ips;
         this.isOccupied = isOccupied;
+        this.occupier = occupier;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIps() {
+        return controllerIPs;
+    }
+
+    public void setIps(String controllerIPs) {
+        this.controllerIPs = controllerIPs;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getOccupier() {
+        return occupier;
+    }
+
+    public void setOccupier(String occupier) {
         this.occupier = occupier;
     }
 
@@ -43,20 +86,28 @@ public class Device {
         this.endTime = endTime;
     }
 
-    public int getId() {
-        return id;
+    public String getDeviceGroup() {
+        return deviceGroup;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setDeviceGroup(String deviceGroup) {
+        this.deviceGroup = deviceGroup;
     }
 
-    public String getIps() {
-        return ips;
+    public String getDeviceHostIPs() {
+        return deviceHostIPs;
     }
 
-    public void setIps(String ips) {
-        this.ips = ips;
+    public void setDeviceHostIPs(String deviceHostIPs) {
+        this.deviceHostIPs = deviceHostIPs;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public int getIsOccupied() {
@@ -67,35 +118,11 @@ public class Device {
         this.isOccupied = isOccupied;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOccupier() {
-        return occupier;
-    }
-
-    public void setOccupier(String occupier) {
-        this.occupier = occupier;
-    }
-
     public int getStatus() {
         return status;
     }
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

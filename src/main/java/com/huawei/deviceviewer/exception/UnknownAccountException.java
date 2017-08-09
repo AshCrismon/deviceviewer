@@ -9,6 +9,6 @@ package com.huawei.deviceviewer.exception;
 public class UnknownAccountException extends RuntimeException{
 
     public UnknownAccountException() {
-        super("Unknown account!");
+        super("用户名不存在!");
     }
 }

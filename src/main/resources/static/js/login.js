@@ -4,14 +4,8 @@
 
 jQuery(document).ready(function () {
 
-    /*
-     Fullscreen background
-     */
     $.backstretch("../img/login_background.jpg");
 
-    /*
-     Form validation
-     */
     $('.login-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function () {
         $(this).removeClass('input-error');
     });
@@ -19,8 +13,9 @@ jQuery(document).ready(function () {
 });
 
 function login() {
-    var username = $('.login-form .form-username').val();
-    var password = $('.login-form .form-password').val();
+    var username = $('.login-form .form-username').val().trim();
+    var password = $('.login-form .form-password').val().trim();
+    validate(username, password);
     var data = {"username": username, "password": password};
     $.post(
         {
@@ -41,9 +36,11 @@ function login() {
     );
 }
 
-function toast(msg) {
-    $(".alert-danger")
-        .text(msg)
-        .fadeIn(1000)
-        .fadeOut(2000);
+function validate(username, password){
+    if(username === "" || password === ""){
+        toast("用户名和密码不能为空！");
+    }
+    return;
 }
+
+

@@ -81,23 +81,6 @@ public class DeviceController {
         return renderMessage("true", "成功解除占用！");
     }
 
-    public void validate(String beginTime, String endTime) throws InvalidTimeRangeException {
-        if (beginTime.compareTo(endTime) >= 0) {
-            throw new InvalidTimeRangeException("不合法的时间范围！");
-        }
-    }
-
-    public void validate(int deviceId, String username) throws EntityNotFoundException {
-        System.out.println(username);
-        if (null == deviceService.loadById(deviceId)) {
-            throw new EntityNotFoundException("设备不存在！");
-        }
-        Device device = deviceService.loadById(deviceId);
-        if(device.getIsOccupied() == 1 && !device.getOccupier().equals(username)){
-            throw new DeviceOccupyingException("设备已经被占用！");
-        }
-    }
-
     public List<Map<String, Object>> wrapDeviceList(List<Device> deviceList, String username) {
         List<Map<String, Object>> wrappedDeviceList = new ArrayList<>();
 
@@ -106,7 +89,12 @@ public class DeviceController {
             deviceMap.put("id", device.getId());
             deviceMap.put("type", device.getType());
             deviceMap.put("name", device.getName());
-            deviceMap.put("ips", device.getIps());
+
+            deviceMap.put("occupierName", "");
+            deviceMap.put("deviceGroup", device.getDeviceGroup());
+            deviceMap.put("deviceHostIPs", device.getDeviceHostIPs());
+            deviceMap.put("controllerIPs", device.getIps());
+            deviceMap.put("note", device.getNote());
 
             if (!device.getBeginTime().isEmpty()
                     && !device.getEndTime().isEmpty()
@@ -125,7 +113,6 @@ public class DeviceController {
             }
 
             deviceMap.put("occupierUsername", device.getOccupier());
-            deviceMap.put("occupierName", "");
             deviceMap.put("beginTime", device.getBeginTime());
             deviceMap.put("endTime", device.getEndTime());
             deviceMap.put("isOccupied", device.getIsOccupied());
@@ -156,5 +143,22 @@ public class DeviceController {
         message.put("status", status);
         message.put("msg", msg);
         return message;
+    }
+
+    public void validate(String beginTime, String endTime) throws InvalidTimeRangeException {
+        if (beginTime.compareTo(endTime) >= 0) {
+            throw new InvalidTimeRangeException("不合法的时间范围！");
+        }
+    }
+
+    public void validate(int deviceId, String username) throws EntityNotFoundException {
+        System.out.println(username);
+        if (null == deviceService.loadById(deviceId)) {
+            throw new EntityNotFoundException("设备不存在！");
+        }
+        Device device = deviceService.loadById(deviceId);
+        if(device.getIsOccupied() == 1 && !device.getOccupier().equals(username)){
+            throw new DeviceOccupyingException("设备已经被占用！");
+        }
     }
 }

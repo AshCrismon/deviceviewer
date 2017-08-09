@@ -14,7 +14,7 @@ function loadAllDevices() {
                 if (status === "true") {
                     refreshDeviceList(msg);
                 } else {
-                    console.log("load device data failed!");
+                    console.log("设备加载失败！");
                 }
             }
 
@@ -32,7 +32,6 @@ function loadDeviceByPage(pageNo) {
                 var msg = result.msg;
                 $(".table-device tbody").children().remove();
                 if (status === "true") {
-
                     refreshDeviceList(msg.deviceList);
                     paginate(msg.pageNo, msg.totalPages, 10, '.page');
                     // paginate(2, 100, 20, '.page_1');
@@ -48,15 +47,26 @@ function loadDeviceByPage(pageNo) {
 function refreshDeviceList(deviceList) {
     deviceList.forEach(function (e) {
 
-        var idTd = $("<td></td>").text(e.id);
-        var typeTd = $("<td></td>").text(e.type);
-        var nameTd = $("<td></td>").text(e.name);
-        var ipsTd = $("<td></td>").text(e.ips);
-        var isOccupiedTd = $("<td></td>").text(e.isOccupied === 0 ? "空闲" : "占用");
-        var occupierUsernameTd = $("<td></td>").text(e.occupierUsername);
-        var occupierNameTd = $("<td></td>").text(e.occupierName);
-        var beginTimeTd = $("<td></td>").text(e.beginTime);
-        var endTimeTd = $("<td></td>").text(e.endTime);
+        var idTD = $("<td></td>").text(e.id);
+        var typeTD = $("<td></td>").text(e.type);
+        var nameTD = $("<td></td>").text(e.name);
+        var deviceGroupTD = $("<td></td>").text(e.deviceGroup);
+        var deviceHostIPsTD = $("<td></td>").text(e.deviceHostIPs);
+        var controllerIPsTD = $("<td></td>").text(e.controllerIPs);
+        // var isOccupiedTD = $("<td></td>").text(e.isOccupied === 0 ? "空闲" : "占用");
+        var isOccupiedTD = $("<td></td>");
+        var occupyStateDiv = $("<div></div>");
+        if(e.isOccupied){
+            isOccupiedTD.html(occupyStateDiv.addClass("circle-red"));
+        }else{
+            isOccupiedTD.html(occupyStateDiv.addClass("circle-green"));
+        }
+        
+        var occupierUsernameTD = $("<td></td>").text(e.occupierUsername);
+        var occupierNameTD = $("<td></td>").text(e.occupierName);
+        var beginTimeTD = $("<td></td>").text(e.beginTime);
+        var endTimeTD = $("<td></td>").text(e.endTime);
+        var noteTD = $("<td></td>").text(e.note);
         var applyBtn = $("<a class='btn btn-info'>申请</a>")
             .css('width', '82px')
             .attr("data-backdrop", "false")
@@ -73,19 +83,22 @@ function refreshDeviceList(deviceList) {
                 applyBtn.addClass("disabled");
             }
         }
-        var optionTd = $("<td></td>").append(applyBtn);
+        var optionTD = $("<td></td>").append(applyBtn);
 
         var trDom = $("<tr></tr>")
-            .append(idTd)
-            .append(typeTd)
-            .append(nameTd)
-            .append(ipsTd)
-            .append(isOccupiedTd)
-            .append(occupierUsernameTd)
-            .append(occupierNameTd)
-            .append(beginTimeTd)
-            .append(endTimeTd)
-            .append(optionTd);
+            .append(idTD)
+            .append(typeTD)
+            .append(nameTD)
+            .append(deviceGroupTD)
+            .append(deviceHostIPsTD)
+            .append(controllerIPsTD)
+            .append(isOccupiedTD)
+            .append(occupierUsernameTD)
+            .append(occupierNameTD)
+            .append(beginTimeTD)
+            .append(endTimeTD)
+            .append(noteTD)
+            .append(optionTD);
 
         $(".table-device tbody").append(trDom);
     })
@@ -95,13 +108,17 @@ function applyDeviceModal(tr) {
     var deviceId = $(tr).children().eq(0).text();
     var deviceType = $(tr).children().eq(1).text();
     var deviceName = $(tr).children().eq(2).text();
-    var deviceIPs = $(tr).children().eq(3).text();
-    var applyOrNot = $(tr).children().eq(9).text();
+    var deviceGroup = $(tr).children().eq(3).text();
+    var deviceHostIPs = $(tr).children().eq(4).text();
+    var controllerIPs = $(tr).children().eq(5).text();
+    var applyOrNot = $(tr).children().eq(12).text();
 
     $("#modal-device .device-id").text(deviceId);
     $("#modal-device .device-type").text(deviceType);
     $("#modal-device .device-name").text(deviceName);
-    $("#modal-device .device-ips").text(deviceIPs);
+    $("#modal-device .device-group").text(deviceGroup);
+    $("#modal-device .device-host-ips").text(deviceHostIPs);
+    $("#modal-device .device-controller-ips").text(controllerIPs);
     $("#modal-device .device-applyOrNot").text(applyOrNot);
 
     if (applyOrNot === "申请") {
