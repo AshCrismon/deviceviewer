@@ -1,14 +1,15 @@
 package com.huawei.deviceviewer.interceptor;
 
-import com.alibaba.fastjson.JSONObject;
-import com.huawei.deviceviewer.service.UserService;
+import com.alibaba.fastjson.JSON;
+import com.huawei.deviceviewer.vo.MessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Created by Intellij IDEA.
@@ -18,53 +19,35 @@ import java.io.IOException;
  */
 public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
+    private final String SESSION_ID = "token";
+
     @Autowired
-    private UserService userService;
-
-    private JSONObject message = new JSONObject();
-
-    private final String CONTEXT_PATH = "/deviceviewer";
-    private final String LOGIN_REQUEST = "/user/login";
-    private final String LOGIN_URL = "/views/login.html";
-    private final String HOME_URL = "/views/index.html";
+    private MessageVO messageVO;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        boolean continueFilter = true;
+        boolean continueFilter = false;
         if (isAuthenticated(request.getSession())) {
-            if (isLoginUrl(request) || isLoginRequest(request)) {
-                redirectTo(response, CONTEXT_PATH + HOME_URL);
-                continueFilter = false;
-            }
-        } else if (!isLoginUrl(request) && !isLoginRequest(request)) {
-            redirectTo(response, CONTEXT_PATH + LOGIN_URL);
-            continueFilter = false;
+            continueFilter = true;
         }
+
+        if(!continueFilter){
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;charset=utf-8");
+            PrintWriter out = response.getWriter();
+            out.write(JSON.toJSONString(renderUnthenticateMessage()));
+        }
+
         return continueFilter;
     }
 
     public boolean isAuthenticated(HttpSession session) {
-        return session.getAttribute("sessionId") != null;
+        return session.getAttribute(SESSION_ID) != null;
     }
 
-    private boolean isLoginRequest(HttpServletRequest request) {
-        return LOGIN_REQUEST.equals(getActionUrl(request));
+    private MessageVO renderUnthenticateMessage() {
+        messageVO.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+        messageVO.setMsg("未认证！");
+        return messageVO;
     }
-
-    private boolean isLoginUrl(HttpServletRequest request) {
-        return LOGIN_URL.equals(getActionUrl(request));
-    }
-
-    private String getActionUrl(HttpServletRequest request){
-        String contextPath = request.getContextPath();  // [/deviceviewer]
-        String url = request.getRequestURL().toString();
-        String actionUrl = url.substring(url.indexOf(contextPath) + contextPath.length());
-        return actionUrl;
-    }
-
-    private void redirectTo(HttpServletResponse response, String url) throws IOException {
-        response.sendRedirect(url);
-    }
-
 }

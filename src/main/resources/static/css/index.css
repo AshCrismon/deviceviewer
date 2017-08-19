@@ -9,6 +9,11 @@ div.panel.panel-default {
     top: 50px !important;
 }
 
+table {
+    word-break: break-all !important;
+    word-wrap: break-word;
+}
+
 table thead th {
     font-weight: bold !important;
 }
@@ -16,6 +21,14 @@ table thead th {
 table tbody tr td {
     vertical-align: middle !important;
 }
+
+table tbody .tr-importance-warn{
+    background: #FFE1FF !important;
+}
+
+/*table tbody .td-host-ips, .td-controller-ips {*/
+    /*color: darkcyan !important;*/
+/*}*/
 
 div.modal form {
     padding-left: 13% !important;
@@ -41,15 +54,16 @@ ul li .logout {
 }
 
 .circle-red {
-    width: 17px;
-    height: 17px;
-    background-color: red;
-    border-radius: 50px;
+    width: 17px !important;
+    height: 17px !important;
+    background-color: red !important;
+    border-radius: 50px !important;
 }
 
 .circle-green {
-    width: 17px;
-    height: 17px;
-    background-color: #00FF7F;
-    border-radius: 50px;
+    width: 17px !important;
+    height: 17px !important;
+    background-color: #00FF7F !important;
+    border-radius: 50px !important;
 }
+

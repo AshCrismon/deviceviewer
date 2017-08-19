@@ -7,15 +7,17 @@
 
 	<resultMap id="device" type="Device">
 		<id property="id" column="ID" />
-		<result property="name" column="DeviceName" />
+		<result property="deviceName" column="DeviceName" />
 		<result property="controllerIPs" column="ControllerIPs" />
-		<result property="type" column="DeviceType" />
+		<result property="deviceType" column="DeviceType" />
 		<result property="occupier" column="Occupier" />
 		<result property="beginTime" column="BeginTime" />
 		<result property="endTime" column="EndTime" />
 		<result property="deviceGroup" column="DeviceGroup" />
 		<result property="deviceHostIPs" column="deviceHostIPs" />
 		<result property="note" column="Note" />
+		<result property="hostAccount" column="HostAccount" />
+		<result property="controllerAccount" column="controllerAccount" />
 		<result property="isOccupied" column="IsOccupied" />
 		<result property="status" column="Status" />
 	</resultMap>
@@ -32,20 +34,24 @@
 			DeviceGroup,
 			DeviceHostIPs,
 			Note,
+			HostAccount,
+			ControllerAccount,
 			IsOccupied,
 			Status
 		)
 		VALUES
 		(
-			#{name},
+			#{deviceName},
 			#{controllerIPs},
-			#{type},
+			#{deviceType},
 			#{occupier},
 			#{beginTime},
 			#{endTime},
 			#{deviceGroup},
 			#{deviceHostIPs},
 			#{note},
+			#{hostAccount},
+			#{controllerAccount},
 			#{isOccupied},
 			#{status}
 		)
@@ -58,15 +64,17 @@
 
 	<update id="update" parameterType="Device">
 		UPDATE DV_Device SET
-		DeviceName=#{name},
+		DeviceName=#{deviceName},
 		ControllerIPs=#{controllerIPs},
-		DeviceType=#{type},
+		DeviceType=#{deviceType},
 		Occupier=#{occupier},
 		BeginTime=#{beginTime},
 		EndTime=#{endTime},
 		DeviceGroup=#{deviceGroup},
 		DeviceHostIPs=#{deviceHostIPs},
 		Note=#{note},
+		HostAccount=#{hostAccount},
+		ControllerAccount=#{controllerAccount},
 		IsOccupied=#{isOccupied},
 		Status=#{status}
 		WHERE ID=#{id}

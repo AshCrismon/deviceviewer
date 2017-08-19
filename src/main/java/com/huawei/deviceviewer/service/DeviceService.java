@@ -19,13 +19,13 @@ public interface DeviceService {
 
     public void updateDevice(Device device);
 
-    public Device loadById(int id);
+    public Device loadDeviceById(int deviceId);
 
-    public List<Device> loadAll();
+    public List<Device> loadAllDevices();
 
-    public Page<Device> loadByPage(int pageNo, int pageSize);
+    public Page<Device> loadDevicesByPage(int pageNo, int pageSize);
 
-    public void applyDevice(int id, String username, String beginTime, String endTime);
+    public void applyDevice(int deviceId, String username, String beginTime, String endTime);
 
-    public void cancelDevice(int id, String username);
+    public void cancelDevice(int deviceId, String username);
 }

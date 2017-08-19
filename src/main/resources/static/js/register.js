@@ -28,7 +28,7 @@ function register() {
             data: data,
             dataType: "json",
             success: function (result) {
-                if (result.status === "true") {
+                if (result.statusCode === 200) {
                     console.log("register success!");
                     window.location.href = "/deviceviewer/views/index.html";
                 } else {

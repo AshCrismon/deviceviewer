@@ -2,13 +2,13 @@ package com.huawei.deviceviewer.exception;
 
 /**
  * Created by Intellij IDEA.
- * Author: gyyjq
+ * Author: Yadi.Sun
  * Date: 2017/8/8
- * Email: yadysun@gmail.com
+ * Email: sunyadi@huawei.com
  */
 public class DuplicateAccountException extends RuntimeException {
     public DuplicateAccountException(){
-        super("duplicate account found!");
+        super("用户名已经存在！");
     }
 
     public DuplicateAccountException(String msg){

@@ -7,13 +7,13 @@ import java.util.Date;
 public class DateUtils {
 
 	private static final String DEFAULT_PATTERN = "yyyy-MM-dd HH:mm";
-	
+
 	private static SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_PATTERN);
-	
+
 	public static String now(){
 		return sdf.format(new Date());
 	}
-	
+
 
 	public static Date parse(String date) throws ParseException{
 		return sdf.parse(date);

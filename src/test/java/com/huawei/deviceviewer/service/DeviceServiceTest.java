@@ -2,6 +2,7 @@ package com.huawei.deviceviewer.service;
 
 import com.huawei.deviceviewer.config.AbstractTestConfig;
 import com.huawei.deviceviewer.entity.Device;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +20,7 @@ public class DeviceServiceTest extends AbstractTestConfig{
     private DeviceService deviceService;
 
     @Test
-    public void testInsertDevice(){
+    public void testInsertDevice() throws InvalidArgumentException {
         Device device1 = new Device("18000V2R2", "anonymous", "8.46.47.145/146", 0, "");
         Device device2 = new Device("18000V2R2", "anonymous", "8.46.47.157/158", 0, "");
         Device device3 = new Device("18000V2R2", "anonymous", "8.46.47.182/183", 0, "");
@@ -44,11 +45,11 @@ public class DeviceServiceTest extends AbstractTestConfig{
 
     @Test
     public void testLoadAll(){
-        List<Device> deviceList = deviceService.loadAll();
+        List<Device> deviceList = deviceService.loadAllDevices();
         print("total records: " + deviceList.size());
         for(Device device : deviceList){
             print(
-                    "Device IPs: " + device.getIps() +
+                    "Device IPs: " + device.getControllerIPs() +
                     ", IsOccupied: " + device.getIsOccupied() +
                     ", Occupier: " + device.getOccupier());
         }
@@ -62,5 +63,12 @@ public class DeviceServiceTest extends AbstractTestConfig{
         String beginTime = "2017-08-05 12:12:12";
         String endTime = "2017-08-05 21:12:12";
         deviceService.applyDevice(deviceId, username, beginTime, endTime);
+    }
+
+    @Test
+    public void testLoadDevice(){
+        int deviceId = 1;
+        Device device = deviceService.loadDeviceById(deviceId);
+        print(device.getDeviceType());
     }
 }

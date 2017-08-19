@@ -9,7 +9,7 @@ package com.huawei.deviceviewer.exception;
 public class InvalidTimeRangeException extends RuntimeException{
 
     public InvalidTimeRangeException(){
-        super("Invalid time range!");
+        super("不合法的时间范围!");
     }
 
     public InvalidTimeRangeException(String msg){

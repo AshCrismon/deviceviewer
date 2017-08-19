@@ -8,13 +8,14 @@ function loadAllDevices() {
             url: "/deviceviewer/device/list",
             dataType: "json",
             success: function (result) {
-                var status = result.status;
                 var msg = result.msg;
                 $(".table-device tbody").children().remove();
-                if (status === "true") {
+                if (result.statusCode === 200) {
                     refreshDeviceList(msg);
-                } else {
-                    console.log("设备加载失败！");
+                } else if(result.statusCode === 401){
+                    window.location.href = "/deviceviewer/views/login.html";
+                } else{
+
                 }
             }
 
@@ -28,15 +29,16 @@ function loadDeviceByPage(pageNo) {
             url: "/deviceviewer/device/loadPage/" + pageNo,
             dataType: "json",
             success: function (result) {
-                var status = result.status;
-                var msg = result.msg;
                 $(".table-device tbody").children().remove();
-                if (status === "true") {
-                    refreshDeviceList(msg.deviceList);
-                    paginate(msg.pageNo, msg.totalPages, 10, '.page');
+                var data = result.data;
+                if (result.statusCode === 200) {
+                    refreshDeviceList(data.deviceList);
+                    paginate(data.pageNo, data.totalPages, 10, '.page');
                     // paginate(2, 100, 20, '.page_1');
+                } else if(result.statusCode === 401){
+                    window.location.href = "/deviceviewer/views/login.html";
                 } else {
-                    console.log("load device data failed!");
+                    toast(result.msg);
                 }
             }
 
@@ -47,12 +49,12 @@ function loadDeviceByPage(pageNo) {
 function refreshDeviceList(deviceList) {
     deviceList.forEach(function (e) {
 
-        var idTD = $("<td></td>").text(e.id);
-        var typeTD = $("<td></td>").text(e.type);
-        var nameTD = $("<td></td>").text(e.name);
+        var idTD = $("<td></td>").text(e.deviceId);
+        var deviceTypeTD = $("<td></td>").text(e.deviceType);
+        var deviceNameTD = $("<td></td>").text(e.deviceName);
         var deviceGroupTD = $("<td></td>").text(e.deviceGroup);
-        var deviceHostIPsTD = $("<td></td>").text(e.deviceHostIPs);
-        var controllerIPsTD = $("<td></td>").text(e.controllerIPs);
+        var deviceHostIPsTD = $("<td class='td-host-ips'></td>").html(e.deviceHostIPs + "<br/>" + e.hostAccount);
+        var controllerIPsTD = $("<td class='td-controller-ips'></td>").html(e.controllerIPs + "<br/>" + e.controllerAccount);
         // var isOccupiedTD = $("<td></td>").text(e.isOccupied === 0 ? "空闲" : "占用");
         var isOccupiedTD = $("<td></td>");
         var occupyStateDiv = $("<div></div>");
@@ -67,6 +69,7 @@ function refreshDeviceList(deviceList) {
         var beginTimeTD = $("<td></td>").text(e.beginTime);
         var endTimeTD = $("<td></td>").text(e.endTime);
         var noteTD = $("<td></td>").text(e.note);
+
         var applyBtn = $("<a class='btn btn-info'>申请</a>")
             .css('width', '82px')
             .attr("data-backdrop", "false")
@@ -87,18 +90,22 @@ function refreshDeviceList(deviceList) {
 
         var trDom = $("<tr></tr>")
             .append(idTD)
-            .append(typeTD)
-            .append(nameTD)
+            .append(deviceTypeTD)
+            .append(deviceNameTD)
             .append(deviceGroupTD)
             .append(deviceHostIPsTD)
             .append(controllerIPsTD)
             .append(isOccupiedTD)
-            .append(occupierUsernameTD)
             .append(occupierNameTD)
+            .append(occupierUsernameTD)
             .append(beginTimeTD)
             .append(endTimeTD)
             .append(noteTD)
             .append(optionTD);
+
+        if(e.note === "CI"){
+            trDom.addClass("tr-importance-warn");
+        }
 
         $(".table-device tbody").append(trDom);
     })
@@ -181,10 +188,12 @@ function applyDevice() {
             data: data,
             dataType: "json",
             success: function (result) {
-                var status = result.status;
-                var msg = result.msg;
-                if (status === "true") {
+                if (result.statusCode === 200) {
                     loadDeviceByPage(1);
+                }else if(result.statusCode === 401){
+                    window.location.href = "/deviceviewer/views/login.html";
+                } else{
+                    toast(result.msg);
                 }
             }
 
@@ -202,25 +211,30 @@ function cancelDevice() {
             data: data,
             dataType: "json",
             success: function (result) {
-                var status = result.status;
                 var msg = result.msg;
-                if (status === "true") {
+                if (result.statusCode === 200) {
                     loadDeviceByPage(1);
+                }else if(result.statusCode === 401){
+                    window.location.href = "/deviceviewer/views/login.html";
+                } else{
+
                 }
             }
         });
 }
 
-function getSession(){
+function getToken(){
     $.get(
         {
-            url: "/deviceviewer/user/getSession",
+            url: "/deviceviewer/user/getToken",
             dataType: "json",
             success: function (result) {
-                var status = result.status;
-                var msg = result.msg;
-                if (status === "true") {
-                    $(".caret").before(msg);
+                if (result.statusCode === 200) {
+                    $(".caret").before(result.token);
+                }else if(result.statusCode === 401){
+                    window.location.href = "/deviceviewer/views/login.html";
+                } else{
+                    
                 }
             }
         });
@@ -232,7 +246,7 @@ function logout() {
             url: "/deviceviewer/user/logout",
             dataType: "json",
             success: function (result) {
-                if (result.status === "true") {
+                if (result.statusCode === 200) {
                     console.log("logout success!");
                     window.location.href = "/deviceviewer/views/login.html";
                 } else {
@@ -246,4 +260,4 @@ function logout() {
 
 loadDeviceByPage(1);
 initBindEvent();
-getSession();
+getToken();

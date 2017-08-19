@@ -1,7 +1,6 @@
 package com.huawei.deviceviewer.service;
 
 import com.huawei.deviceviewer.entity.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -25,5 +24,6 @@ public interface UserService {
 
     public List<User> loadAll();
 
-    public void verifyUser(String username, String password);
+    public void loginVerify(String username, String password);
+
 }

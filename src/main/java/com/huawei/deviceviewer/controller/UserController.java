@@ -1,18 +1,15 @@
 package com.huawei.deviceviewer.controller;
 
 import com.huawei.deviceviewer.entity.User;
-import com.huawei.deviceviewer.exception.DuplicateAccountException;
-import com.huawei.deviceviewer.exception.IncorrectCredentialsException;
-import com.huawei.deviceviewer.exception.UnknownAccountException;
 import com.huawei.deviceviewer.service.UserService;
+import com.huawei.deviceviewer.vo.MessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Intellij IDEA.
@@ -24,66 +21,49 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+    private final String SESSION_ID = "token";
+
+    @Autowired
+    private MessageVO message;
     @Autowired
     private UserService userService;
-    private Map<String, Object> message = new HashMap<>();
 
     @RequestMapping("/login")
-    Map<String, Object> login(@RequestParam(value = "username") String username,
-                              @RequestParam(value = "password") String password,
-                              HttpSession session) {
-        return loginVerify(username, password, session);
+    MessageVO login(@RequestParam(value = "username") String username,
+                    @RequestParam(value = "password") String password,
+                    HttpSession session) {
+        userService.loginVerify(username, password);
+        session.setAttribute(SESSION_ID, username);
+        return renderMessage("登录成功！", username);
     }
 
     @RequestMapping("/logout")
-    Map<String, Object> logout(HttpSession session) {
-        session.removeAttribute("sessionId");
-        return renderMessage("true", "logout success!");
-    }
-
-    @RequestMapping("/getSession")
-    Map<String, Object> getSession(HttpSession session) {
-        return renderMessage("true", session.getAttribute("sessionId"));
+    MessageVO logout(HttpSession session) {
+        session.removeAttribute(SESSION_ID);
+        return renderMessage("退出成功！", "");
     }
 
     @RequestMapping("/register")
-    Map<String, Object> register(@RequestParam(value = "name") String name,
-                                 @RequestParam(value = "username") String username,
-                                 @RequestParam(value = "password") String password,
-                                 HttpSession session) {
-        try{
-            validate(username);
-        }catch(Exception ex){
-            return renderMessage("false", ex.getMessage());
-        }
+    MessageVO register(@RequestParam(value = "name") String name,
+                       @RequestParam(value = "username") String username,
+                       @RequestParam(value = "password") String password,
+                       HttpSession session) {
+
         User user = new User(name, username, password);
         userService.insertUser(user);
-        session.setAttribute("sessionId", username);
-        return renderMessage("true", "注册成功！");
+        session.setAttribute(SESSION_ID, username);
+        return renderMessage("注册成功！", username);
     }
 
-    public void validate(String username){
-        if(null != userService.loadByUsername(username)){
-            throw new DuplicateAccountException("用户名已经存在！");
-        }
+    @RequestMapping("/getToken")
+    MessageVO getToken(HttpSession session) {
+        return renderMessage("操作成功！", session.getAttribute(SESSION_ID));
     }
 
-    private Map<String, Object> loginVerify(String username, String password, HttpSession session) {
-        String status = "true";
-        String msg = "";
-        try {
-            userService.verifyUser(username, password);
-            session.setAttribute("sessionId", username);
-        } catch (Exception ex) {
-            msg = ex.getMessage();
-            status = "false";
-        }
-        return renderMessage(status, msg);
-    }
-
-    private Map<String, Object> renderMessage(String status, Object msg) {
-        message.put("status", status);
-        message.put("msg", msg);
+    private MessageVO renderMessage(String msg, Object token) {
+        message.setStatusCode(HttpStatus.OK.value());
+        message.setMsg(msg);
+        message.setToken(token);
         return message;
     }
 }

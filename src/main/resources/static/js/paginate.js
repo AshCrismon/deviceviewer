@@ -1,7 +1,7 @@
 /**
  * Created by hadoop on 2017/8/6.
  */
-function paginate(pageNo, totalPages, limit, pageDomClass){
+function    paginate(pageNo, totalPages, limit, pageDomClass){
     var pageStart = pageNo - limit / 2 > 0 ? pageNo - limit / 2 : 1;
     var pageEnd = pageStart + limit - 1 > totalPages ? totalPages : pageStart + limit - 1;
     $(pageDomClass + ' ul.pagination li.page-element').remove();
@@ -15,13 +15,13 @@ function paginate(pageNo, totalPages, limit, pageDomClass){
         $(pageDomClass + ' ul.pagination li:last').before(li);
     }
     $(pageDomClass + ' ul.pagination li:eq('+ (pageNo - pageStart + 1) + ')').addClass('active');
-    $(pageDomClass + ' ul.pagination li a.previous').on('click', function(){ 
+    $(pageDomClass + ' ul.pagination li a.previous').unbind('click').on('click', function(){ 
         var previous = parseInt($(pageDomClass + ' ul.pagination li.active').text()) - 1;
         if(previous >= 1){
             loadDeviceByPage(previous);
         }
     });
-    $(pageDomClass + ' ul.pagination li a.next').on('click', function(){
+    $(pageDomClass + ' ul.pagination li a.next').unbind('click').on('click', function(){
         var next = parseInt($(pageDomClass + ' ul.pagination li.active').text()) + 1;
         if(next <= totalPages){
             loadDeviceByPage(next);

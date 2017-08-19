@@ -22,8 +22,8 @@ function login() {
             url: "/deviceviewer/user/login",
             data: data,
             dataType: "json",
-            success: function (result, status, xhr) {
-                if (result.status === "true") {
+            success: function (result) {
+                if (result.statusCode === 200) {
                     console.log("login success!");
                     window.location.href = "/deviceviewer/views/index.html";
                 } else {

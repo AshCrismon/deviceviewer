@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Created by Intellij IDEA.
  * Author: Yadi.Sun
  * Date: 2017/7/30
- * Email: yadysun@gmail.com
+ * Email: sunyadi@huawei.com
  */
 @Configuration
 public class WebSecurityConfig extends WebMvcConfigurerAdapter {
@@ -22,14 +22,27 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
         return new SecurityInterceptor();
     }
 
+    /**
+     * 请求先经过这里
+     *
+     * @param registry
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getSecurityInterceptor())
                 .excludePathPatterns("/user/login")
                 .excludePathPatterns("/user/register")
-                .addPathPatterns("/**");
+                .excludePathPatterns("/")
+                .addPathPatterns("/**")
+//                .excludePathPatterns("/user/register")
+        ;
     }
 
+    /**
+     * 请求后经过这里
+     *
+     * @param registry
+     */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/views/index.html");

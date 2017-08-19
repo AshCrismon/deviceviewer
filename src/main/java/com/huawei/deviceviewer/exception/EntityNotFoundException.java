@@ -9,7 +9,7 @@ package com.huawei.deviceviewer.exception;
 public class EntityNotFoundException extends RuntimeException {
 
     public EntityNotFoundException(){
-        super("entity not found!");
+        super("Entity not found!");
     }
 
     public EntityNotFoundException(String msg){

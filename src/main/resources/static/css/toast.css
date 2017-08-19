@@ -1,0 +1,9 @@
+div.alert {
+    position: absolute;
+    right: 40%;
+    top: 0;
+    width: 400px;
+    height: 40px;
+    padding: 10px;
+    display: none;
+}

@@ -26,6 +26,6 @@ public class UserServiceTest extends AbstractTestConfig {
     public void testVerifyUser(){
         String username = "s00423985";
         String password = "123456";
-        userService.verifyUser(username, password);
+        userService.loginVerify(username, password);
     }
 }
