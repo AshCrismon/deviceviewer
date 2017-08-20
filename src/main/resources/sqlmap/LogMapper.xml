@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.huawei.deviceviewer.dao.LogDao">
+
+    <resultMap id="log" type="Log">
+        <id property="id" column="ID"/>
+        <result property="deviceId" column="DeviceId"/>
+        <result property="username" column="Username"/>
+        <result property="actionType" column="ActionType"/>
+        <result property="beginTime" column="BeginTime"/>
+        <result property="endTime" column="EndTime"/>
+        <result property="createTime" column="CreateTime"/>
+        <result property="status" column="Status"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="Log">
+        INSERT INTO DV_Log
+        (
+            DeviceId,
+            Username,
+            ActionType,
+            BeginTime,
+            EndTime,
+            CreateTime,
+            Status
+        )
+        VALUES
+        (
+            #{deviceId},
+            #{username},
+            #{actionType},
+            #{beginTime},
+            #{endTime},
+            #{createTime},
+            #{status}
+        )
+    </insert>
+
+    <select id="loadAll" resultMap="log">
+        SELECT * FROM DV_Log
+    </select>
+
+    <select id="loadPage" resultMap="log">
+        SELECT * FROM DV_Log LIMIT #{0},#{1}
+    </select>
+
+    <select id="loadByDeviceId" resultMap="log">
+        SELECT * FROM DV_Log WHERE
+        DeviceId=#{0}
+        ORDER BY CreateTime DESC
+        LIMIT #{1}
+    </select>
+
+</mapper>

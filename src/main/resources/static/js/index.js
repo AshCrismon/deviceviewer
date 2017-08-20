@@ -12,9 +12,9 @@ function loadAllDevices() {
                 $(".table-device tbody").children().remove();
                 if (result.statusCode === 200) {
                     refreshDeviceList(msg);
-                } else if(result.statusCode === 401){
+                } else if (result.statusCode === 401) {
                     window.location.href = "/deviceviewer/views/login.html";
-                } else{
+                } else {
 
                 }
             }
@@ -35,7 +35,7 @@ function loadDeviceByPage(pageNo) {
                     refreshDeviceList(data.deviceList);
                     paginate(data.pageNo, data.totalPages, 10, '.page');
                     // paginate(2, 100, 20, '.page_1');
-                } else if(result.statusCode === 401){
+                } else if (result.statusCode === 401) {
                     window.location.href = "/deviceviewer/views/login.html";
                 } else {
                     toast(result.msg);
@@ -53,25 +53,33 @@ function refreshDeviceList(deviceList) {
         var deviceTypeTD = $("<td></td>").text(e.deviceType);
         var deviceNameTD = $("<td></td>").text(e.deviceName);
         var deviceGroupTD = $("<td></td>").text(e.deviceGroup);
-        var deviceHostIPsTD = $("<td class='td-host-ips'></td>").html(e.deviceHostIPs + "<br/>" + e.hostAccount);
-        var controllerIPsTD = $("<td class='td-controller-ips'></td>").html(e.controllerIPs + "<br/>" + e.controllerAccount);
-        // var isOccupiedTD = $("<td></td>").text(e.isOccupied === 0 ? "空闲" : "占用");
+
+        var deviceHostIPsTD = $("<td class='td-host-ips'></td>")
+            .append($("<span class='ips'></span>").text(e.deviceHostIPs))
+            .append("<br/>")
+            .append($("<span class='account'></span>").text(e.hostAccount));
+
+        var controllerIPsTD = $("<td class='td-controller-ips'></td>")
+            .append($("<span class='ips'></span>").text(e.controllerIPs))
+            .append("<br/>")
+            .append($("<span class='account'></span>").text(e.controllerAccount));
+
         var isOccupiedTD = $("<td></td>");
         var occupyStateDiv = $("<div></div>");
-        if(e.isOccupied){
+        if (e.isOccupied) {
             isOccupiedTD.html(occupyStateDiv.addClass("circle-red"));
-        }else{
+        } else {
             isOccupiedTD.html(occupyStateDiv.addClass("circle-green"));
         }
-        
+
         var occupierUsernameTD = $("<td></td>").text(e.occupierUsername);
         var occupierNameTD = $("<td></td>").text(e.occupierName);
         var beginTimeTD = $("<td></td>").text(e.beginTime);
         var endTimeTD = $("<td></td>").text(e.endTime);
         var noteTD = $("<td></td>").text(e.note);
 
-        var applyBtn = $("<a class='btn btn-info'>申请</a>")
-            .css('width', '82px')
+        var applyBtn = $("<a class='btn btn-info btn-apply'>申请</a>")
+            .css('width', '62px')
             .attr("data-backdrop", "false")
             .attr("data-toggle", "modal")
             .attr("data-target", "#modal-device")
@@ -79,14 +87,26 @@ function refreshDeviceList(deviceList) {
                 applyDeviceModal($(this).parent().parent());
             });
 
+        var logBtn = $("<a class='btn btn-info btn-log'>查看日志</a>")
+            .css('width', '82px')
+            .attr("data-backdrop", "false")
+            .attr("data-toggle", "modal")
+            .attr("data-target", "#modal-device-log")
+            .on("click", function () {
+                var tr = $(this).parent().parent();
+                var deviceId = $(tr).children().eq(0).text();
+                loadLogByDeviceId(deviceId, 10, e.controllerIPs);
+            });
+
         if (e.isOccupied === 1) {
             if (e.occupierIsMe === 1) {
-                applyBtn.text("解除占用");
+                applyBtn.removeClass("btn-info").addClass("btn-success").text("释放");
+                logBtn.removeClass("btn-info").addClass("btn-success");
             } else {
                 applyBtn.addClass("disabled");
             }
         }
-        var optionTD = $("<td></td>").append(applyBtn);
+        var optionTD = $("<td></td>").append(applyBtn).append(logBtn);
 
         var trDom = $("<tr></tr>")
             .append(idTD)
@@ -103,7 +123,7 @@ function refreshDeviceList(deviceList) {
             .append(noteTD)
             .append(optionTD);
 
-        if(e.note === "CI"){
+        if (e.note === "CI") {
             trDom.addClass("tr-importance-warn");
         }
 
@@ -116,9 +136,9 @@ function applyDeviceModal(tr) {
     var deviceType = $(tr).children().eq(1).text();
     var deviceName = $(tr).children().eq(2).text();
     var deviceGroup = $(tr).children().eq(3).text();
-    var deviceHostIPs = $(tr).children().eq(4).text();
-    var controllerIPs = $(tr).children().eq(5).text();
-    var applyOrNot = $(tr).children().eq(12).text();
+    var deviceHostIPs = $(tr).children().eq(4).children(":first").text();
+    var controllerIPs = $(tr).children().eq(5).children(":first").text();
+    var applyOrNot = $(tr).children().eq(12).children(":first").text();
 
     $("#modal-device .device-id").text(deviceId);
     $("#modal-device .device-type").text(deviceType);
@@ -137,7 +157,7 @@ function applyDeviceModal(tr) {
 
 
 function initBindEvent() {
-    
+
     $(".logout").on("click", logout);
 
     $('.form-datetime').datetimepicker({
@@ -158,16 +178,16 @@ function initBindEvent() {
         $(".input-end-time").val("");
     });
 
-    $(".btn-ok").on("click", function(){
+    $(".btn-ok").on("click", function () {
         applyOrCancelDevice($("#modal-device .device-applyOrNot").text());
     });
 }
 
-function applyOrCancelDevice(op){
-    if(op === "申请"){
+function applyOrCancelDevice(op) {
+    if (op === "申请") {
         applyDevice();
-    }else{
-        cancelDevice();
+    } else {
+        releaseDevice();
     }
 }
 
@@ -190,9 +210,9 @@ function applyDevice() {
             success: function (result) {
                 if (result.statusCode === 200) {
                     loadDeviceByPage(1);
-                }else if(result.statusCode === 401){
+                } else if (result.statusCode === 401) {
                     window.location.href = "/deviceviewer/views/login.html";
-                } else{
+                } else {
                     toast(result.msg);
                 }
             }
@@ -200,30 +220,30 @@ function applyDevice() {
         });
 }
 
-function cancelDevice() {
+function releaseDevice() {
     var deviceId = $(".device-id").text();
     var data = {
         "deviceId": deviceId
     };
     $.post(
         {
-            url: "/deviceviewer/device/cancel",
+            url: "/deviceviewer/device/release",
             data: data,
             dataType: "json",
             success: function (result) {
                 var msg = result.msg;
                 if (result.statusCode === 200) {
                     loadDeviceByPage(1);
-                }else if(result.statusCode === 401){
+                } else if (result.statusCode === 401) {
                     window.location.href = "/deviceviewer/views/login.html";
-                } else{
-
+                } else {
+                    toast(result.msg);
                 }
             }
         });
 }
 
-function getToken(){
+function getToken() {
     $.get(
         {
             url: "/deviceviewer/user/getToken",
@@ -231,10 +251,10 @@ function getToken(){
             success: function (result) {
                 if (result.statusCode === 200) {
                     $(".caret").before(result.token);
-                }else if(result.statusCode === 401){
+                } else if (result.statusCode === 401) {
                     window.location.href = "/deviceviewer/views/login.html";
-                } else{
-                    
+                } else {
+                    toast(result.msg);
                 }
             }
         });
@@ -246,11 +266,30 @@ function logout() {
             url: "/deviceviewer/user/logout",
             dataType: "json",
             success: function (result) {
+                window.location.href = "/deviceviewer/views/login.html";
+            }
+
+        }
+    );
+}
+
+function loadLogByDeviceId(deviceId, logNum, controllerIPs) {
+    var data = {
+        "deviceId": deviceId,
+        "logNum": logNum
+    };
+    $.get(
+        {
+            url: "/deviceviewer/device/loadLog",
+            dataType: "json",
+            data: data,
+            success: function (result) {
                 if (result.statusCode === 200) {
-                    console.log("logout success!");
+                    refreshDeviceLog(result.data, controllerIPs);
+                } else if (result.statusCode === 401) {
                     window.location.href = "/deviceviewer/views/login.html";
                 } else {
-                    console.log("logout failed!");
+                    toast(result.msg);
                 }
             }
 
@@ -258,6 +297,30 @@ function logout() {
     );
 }
 
-loadDeviceByPage(1);
-initBindEvent();
-getToken();
+function refreshDeviceLog(logList, controllerIPs) {
+    $(".table-device-log tbody").children().remove();
+    logList.forEach(function (e) {
+        var createTimeTD = $("<td></td>").text(e.createTime);
+        var usernameTD = $("<td></td>").text(e.username);
+        var actionTypeTD = $("<td></td>").text(e.actionType === 1 ? "申请" : "释放");
+        var beginTimeTD = $("<td></td>").text(e.beginTime);
+        var endTimeTD = $("<td></td>").text(e.endTime);
+
+        var trDom = $("<tr></tr>")
+            .append(createTimeTD)
+            .append(usernameTD)
+            .append(actionTypeTD)
+            .append(beginTimeTD)
+            .append(endTimeTD);
+
+        $(".table-device-log tbody").append(trDom);
+    });
+    $("#modal-device-log .device-identifier").text(controllerIPs);
+}
+
+(function main() {
+    loadDeviceByPage(1);
+    initBindEvent();
+    getToken();
+})();
+

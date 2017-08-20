@@ -4,8 +4,8 @@ nav.navbar .navbar-header {
 
 div.panel.panel-default {
     position: relative !important;
-    width: 90% !important;
-    left: 5% !important;
+    width: 96% !important;
+    left: 2% !important;
     top: 50px !important;
 }
 
@@ -18,6 +18,15 @@ table thead th {
     font-weight: bold !important;
 }
 
+table thead th,
+table tbody tr td{
+    text-align: center !important;
+}
+
+table tbody tr td div{
+    margin: 0 auto !important;
+}
+
 table tbody tr td {
     vertical-align: middle !important;
 }
@@ -26,9 +35,18 @@ table tbody .tr-importance-warn{
     background: #FFE1FF !important;
 }
 
-/*table tbody .td-host-ips, .td-controller-ips {*/
-    /*color: darkcyan !important;*/
-/*}*/
+table tbody tr td .btn-apply{
+    width: 55px !important;
+    margin-right: 5px !important;
+}
+
+table tbody tr td .btn-log{
+    width: 80px !important;
+}
+
+table tbody .account {
+    color: darkcyan !important;
+}
 
 div.modal form {
     padding-left: 13% !important;
@@ -65,5 +83,13 @@ ul li .logout {
     height: 17px !important;
     background-color: #00FF7F !important;
     border-radius: 50px !important;
+}
+
+.modal-title{
+    font-weight: bold !important;
+}
+
+.device-identifier{
+    font-size: 14px !important;
 }
 

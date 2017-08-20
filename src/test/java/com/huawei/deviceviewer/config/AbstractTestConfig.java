@@ -19,9 +19,11 @@ public class AbstractTestConfig {
     }
 
     public void print(Iterable<?> itr) {
+        print("begin");
         Iterator<?> it = itr.iterator();
         while (it.hasNext()) {
             System.out.println(it.next().toString());
         }
+        print("end");
     }
 }

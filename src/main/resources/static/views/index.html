@@ -45,19 +45,19 @@
     <div class="panel-heading">设备信息</div>
     <table class="table table-stripped table-hover table-device">
         <thead>
-        <th style="width:5%">ID</th>
+        <th style="width:2%">ID</th>
         <th style="width:10%">设备类型</th>
         <th style="width:15%">设备名</th>
         <th style="width:5%">设备组</th>
         <th style="width:10%">主机IPs</th>
         <th style="width:10%">控制器IPs</th>
-        <th style="width:5%">状态</th>
+        <th style="width:3%">状态</th>
         <th style="width:7%">占用人姓名</th>
         <th style="width:7%">占用人工号</th>
         <th style="width:8%">起始时间</th>
         <th style="width:8%">结束时间</th>
         <th style="width:5%">备注</th>
-        <th style="width:5%">操作</th>
+        <th style="width:10%">操作</th>
         </thead>
         <tbody>
         </tbody>
@@ -163,6 +163,37 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default btn-ok" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-device-log">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close btn-close" data-dismiss="modal">
+                    <span>x</span>
+                    <span class="sr-only">关闭</span>
+                </button>
+                <h4 class="modal-title">设备日志 ( <span class="device-identifier"></span> )</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-stripped table-hover table-device-log">
+                    <thead>
+                    <th>时间</th>
+                    <th>用户</th>
+                    <th>操作类型</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
     </div>

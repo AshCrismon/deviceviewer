@@ -1,11 +1,10 @@
 package com.huawei.deviceviewer.controller;
 
-import com.huawei.deviceviewer.entity.Device;
-import com.huawei.deviceviewer.entity.Page;
-import com.huawei.deviceviewer.entity.User;
+import com.huawei.deviceviewer.entity.*;
 import com.huawei.deviceviewer.exception.EntityNotFoundException;
 import com.huawei.deviceviewer.exception.InvalidTimeRangeException;
 import com.huawei.deviceviewer.service.DeviceService;
+import com.huawei.deviceviewer.service.LogService;
 import com.huawei.deviceviewer.service.UserService;
 import com.huawei.deviceviewer.utils.DateUtils;
 import com.huawei.deviceviewer.vo.MessageVO;
@@ -38,6 +37,8 @@ public class DeviceController {
     private DeviceService deviceService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LogService logService;
 
     @RequestMapping("/list")
     public MessageVO loadAllDevices(HttpSession session) {
@@ -63,14 +64,23 @@ public class DeviceController {
 
         String token = (String) session.getAttribute(SESSION_ID);
         deviceService.applyDevice(deviceId, token, beginTime, endTime);
-        return renderMessage("申请成功！");
+        logService.insertLog(new Log(deviceId, token, ActionType.APPLY.value(), beginTime, endTime));
+        return renderMessage("设备申请成功！");
     }
 
-    @RequestMapping("/cancel")
-    public MessageVO cancelDevice(@RequestParam(value = "deviceId") int deviceId, HttpSession session) {
+    @RequestMapping("/release")
+    public MessageVO releaseDevice(@RequestParam(value = "deviceId") int deviceId, HttpSession session) {
         String token = (String) session.getAttribute(SESSION_ID);
         deviceService.cancelDevice(deviceId, token);
-        return renderMessage("成功解除占用！");
+        logService.insertLog(new Log(deviceId, token, ActionType.RELEASE.value()));
+        return renderMessage("设备成功释放！");
+    }
+
+    @RequestMapping("/loadLog")
+    public MessageVO loadLogByDeviceId(@RequestParam(value = "deviceId") int deviceId,
+                                       @RequestParam(value = "logNum") int limit) {
+        List<Log> logList = logService.loadByDeviceId(deviceId, limit);
+        return renderMessage(logList);
     }
 
     public List<Map<String, Object>> wrapData(List<Device> deviceList, String token) {

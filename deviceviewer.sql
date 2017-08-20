@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50537
 File Encoding         : 65001
 
-Date: 2017-08-19 17:45:11
+Date: 2017-08-20 17:28:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,7 +44,7 @@ INSERT INTO `dv_device` VALUES ('1', 'anonymous吞吞吐吐拖拖拖拖拖拖拖
 INSERT INTO `dv_device` VALUES ('2', 'anonymous', '8.46.47.103/104', '18000V1R1', '', '', '', '0', '1', '8.46.12.34', 'CI', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('3', 'anonymous', '8.46.47.194/195', '18000V1R1', '', '', '', '0', '1', '8.46.12.34', 'CI', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('4', 'anonymous', '8.46.47.132/133', '18000V1R1', '', '', '', '0', '1', '8.46.12.34', 'CI', 'admin/Storage@21st', 'root/huawei123', 'xve');
-INSERT INTO `dv_device` VALUES ('5', 'anonymous', '8.46.47.145/146', '18000V2R2', 's00423985', '2017-08-19 14:50', '2017-08-20 11:30', '1', '1', '8.46.12.34', 'CI', 'admin/Storage@21st', 'root/huawei123', 'xve');
+INSERT INTO `dv_device` VALUES ('5', 'anonymous', '8.46.47.145/146', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', 'CI', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('6', 'anonymous', '8.46.47.157/158', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('7', 'anonymous', '8.46.47.182/183', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('8', 'anonymous', '8.46.47.168/169', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
@@ -53,7 +53,7 @@ INSERT INTO `dv_device` VALUES ('10', 'anonymous', '8.46.47.182/183', '18000V2R2
 INSERT INTO `dv_device` VALUES ('11', 'anonymous', '8.46.47.191/192', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('12', 'anonymous', '8.46.47.221/222', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('13', 'anonymous', '8.46.47.242/243', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
-INSERT INTO `dv_device` VALUES ('14', 'anonymous', '8.46.47.56/57', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
+INSERT INTO `dv_device` VALUES ('14', 'anonymous', '8.46.47.56/57', '18000V2R2', 's00423985', '2017-08-20 17:20', '2017-08-20 17:30', '1', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('15', 'anonymous', '8.46.47.145/146', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('16', 'anonymous', '8.46.47.157/158', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('17', 'anonymous', '8.46.47.182/183', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
@@ -64,6 +64,51 @@ INSERT INTO `dv_device` VALUES ('21', 'anonymous', '8.46.47.191/192', '18000V2R2
 INSERT INTO `dv_device` VALUES ('22', 'anonymous', '8.46.47.221/222', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('23', 'anonymous', '8.46.47.242/243', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
 INSERT INTO `dv_device` VALUES ('24', 'anonymous', '8.46.47.56/57', '18000V2R2', '', '', '', '0', '1', '8.46.12.34', '', 'admin/Storage@21st', 'root/huawei123', 'xve');
+
+-- ----------------------------
+-- Table structure for `dv_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `dv_log`;
+CREATE TABLE `dv_log` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `DeviceId` int(11) NOT NULL,
+  `Username` varchar(25) NOT NULL,
+  `ActionType` int(1) NOT NULL,
+  `BeginTime` varchar(32) DEFAULT '',
+  `EndTime` varchar(32) DEFAULT '',
+  `CreateTime` varchar(32) NOT NULL,
+  `Status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of dv_log
+-- ----------------------------
+INSERT INTO `dv_log` VALUES ('1', '1', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('2', '2', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('3', '3', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('4', '4', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('5', '5', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('6', '6', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('7', '7', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('8', '8', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('9', '9', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('10', '10', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('11', '11', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('12', '12', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('13', '13', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('14', '14', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('15', '15', 's00423985', '1', '2017-08-19 21:26', '2017-08-19 23:00', '2017-08-19 21:33', '1');
+INSERT INTO `dv_log` VALUES ('16', '7', 's00423985', '1', '', '', '2017-08-20 16:32', '1');
+INSERT INTO `dv_log` VALUES ('17', '1', 's00423985', '1', '2017-08-20 16:55', '2017-08-21 16:55', '2017-08-20 16:58', '1');
+INSERT INTO `dv_log` VALUES ('18', '1', 's00423985', '1', '', '', '2017-08-20 16:59', '1');
+INSERT INTO `dv_log` VALUES ('19', '1', 's00423985', '1', '2017-08-20 17:00', '2017-08-21 17:05', '2017-08-20 17:01', '1');
+INSERT INTO `dv_log` VALUES ('20', '1', 's00423985', '0', '', '', '2017-08-20 17:01', '1');
+INSERT INTO `dv_log` VALUES ('21', '6', 's00423985', '1', '2017-08-20 17:05', '2017-08-22 17:05', '2017-08-20 17:02', '1');
+INSERT INTO `dv_log` VALUES ('22', '6', 's00423985', '0', '', '', '2017-08-20 17:23', '1');
+INSERT INTO `dv_log` VALUES ('23', '14', 's00423985', '1', '2017-08-20 17:20', '2017-08-20 17:30', '2017-08-20 17:23', '1');
+INSERT INTO `dv_log` VALUES ('24', '6', 's1245651', '1', '2017-08-20 17:20', '2017-08-21 17:20', '2017-08-20 17:24', '1');
+INSERT INTO `dv_log` VALUES ('25', '6', 's1245651', '0', '', '', '2017-08-20 17:26', '1');
 
 -- ----------------------------
 -- Table structure for `dv_user`
