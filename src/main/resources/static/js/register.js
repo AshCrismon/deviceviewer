@@ -24,13 +24,13 @@ function register() {
 
     $.post(
         {
-            url: "/deviceviewer/user/register",
+            url: "../user/register",
             data: data,
             dataType: "json",
             success: function (result) {
                 if (result.statusCode === 200) {
                     console.log("register success!");
-                    window.location.href = "/deviceviewer/views/index.html";
+                    window.location.href = "../views/index.html";
                 } else {
                     console.log("register failed!");
                     toast(result.msg);

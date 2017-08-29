@@ -1,5 +1,7 @@
 package com.huawei.deviceviewer.entity;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * Created by Intellij IDEA.
  * Author: Yadi.Sun
@@ -8,7 +10,7 @@ package com.huawei.deviceviewer.entity;
  */
 public class Device {
     private int id;
-    private String deviceName = "";
+    private String deviceName;
     private String controllerIPs = "";
     private String deviceType = "";
     private String occupier = "";

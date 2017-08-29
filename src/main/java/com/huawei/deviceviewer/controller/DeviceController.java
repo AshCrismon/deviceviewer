@@ -42,7 +42,6 @@ public class DeviceController {
 
     @RequestMapping("/list")
     public MessageVO loadAllDevices(HttpSession session) {
-
         String token = (String) session.getAttribute(SESSION_ID);
         List<Device> deviceList = deviceService.loadAllDevices();
         return renderMessage(wrapData(deviceList, token));
@@ -52,7 +51,7 @@ public class DeviceController {
     public MessageVO loadDevicesByPage(@PathVariable(value = "pageNo") int pageNo, HttpSession session) {
 
         String token = (String) session.getAttribute(SESSION_ID);
-        Page<Device> devicePage = deviceService.loadDevicesByPage(pageNo, 10);
+        Page<Device> devicePage = deviceService.loadDevicesByPage(pageNo, 20);
         return renderMessage(wrapDevicePage(devicePage, wrapData(devicePage.getObjList(), token)));
     }
 

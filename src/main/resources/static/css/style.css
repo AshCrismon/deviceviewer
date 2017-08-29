@@ -12,6 +12,10 @@ strong {
     font-weight: 500;
 }
 
+.logo-ibook-300{
+    margin-bottom: -20px;
+}
+
 a, a:hover, a:focus {
     color: #4aaf51;
     text-decoration: none;

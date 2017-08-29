@@ -5,7 +5,7 @@
 function loadAllDevices() {
     $.get(
         {
-            url: "/deviceviewer/device/list",
+            url: "../device/list",
             dataType: "json",
             success: function (result) {
                 var msg = result.msg;
@@ -13,7 +13,7 @@ function loadAllDevices() {
                 if (result.statusCode === 200) {
                     refreshDeviceList(msg);
                 } else if (result.statusCode === 401) {
-                    window.location.href = "/deviceviewer/views/login.html";
+                    window.location.href = "../views/login.html";
                 } else {
 
                 }
@@ -26,7 +26,7 @@ function loadAllDevices() {
 function loadDeviceByPage(pageNo) {
     $.get(
         {
-            url: "/deviceviewer/device/loadPage/" + pageNo,
+            url: "../device/loadPage/" + pageNo,
             dataType: "json",
             success: function (result) {
                 $(".table-device tbody").children().remove();
@@ -36,7 +36,7 @@ function loadDeviceByPage(pageNo) {
                     paginate(data.pageNo, data.totalPages, 10, '.page');
                     // paginate(2, 100, 20, '.page_1');
                 } else if (result.statusCode === 401) {
-                    window.location.href = "/deviceviewer/views/login.html";
+                    window.location.href = "../views/login.html";
                 } else {
                     toast(result.msg);
                 }
@@ -150,9 +150,11 @@ function applyDeviceModal(tr) {
 
     if (applyOrNot === "申请") {
         $("#modal-device .form-time").css("display", "block");
+        timeSlideBar(".time-slidebar");
     } else {
         $("#modal-device .form-time").css("display", "none");
     }
+
 }
 
 
@@ -193,25 +195,32 @@ function applyOrCancelDevice(op) {
 
 function applyDevice() {
     var deviceId = $(".device-id").text();
-    var beginTime = $(".input-begin-time").val();
-    var endTime = $(".input-end-time").val();
+    // var beginTime = $(".input-begin-time").val();
+    // var endTime = $(".input-end-time").val();
+
+    var now = moment().format("YYYY-MM-DD ");
+
+    var timeVal = $(".time-slidebar").val();
+
+    var beginTime = moment().format("YYYY-MM-DD HH:mm");
+    var endTime = now + padzero(parseInt(timeVal / 60), 2) + ":" + padzero(timeVal % 60, 2);
     var data = {
         "deviceId": deviceId,
         "beginTime": beginTime,
         "endTime": endTime
     };
-    $(".input-begin-time").val("");
-    $(".input-end-time").val("");
+    // $(".input-begin-time").val("");
+    // $(".input-end-time").val("");
     $.post(
         {
-            url: "/deviceviewer/device/apply",
+            url: "../device/apply",
             data: data,
             dataType: "json",
             success: function (result) {
                 if (result.statusCode === 200) {
                     loadDeviceByPage(1);
                 } else if (result.statusCode === 401) {
-                    window.location.href = "/deviceviewer/views/login.html";
+                    window.location.href = "../views/login.html";
                 } else {
                     toast(result.msg);
                 }
@@ -227,7 +236,7 @@ function releaseDevice() {
     };
     $.post(
         {
-            url: "/deviceviewer/device/release",
+            url: "../device/release",
             data: data,
             dataType: "json",
             success: function (result) {
@@ -235,7 +244,7 @@ function releaseDevice() {
                 if (result.statusCode === 200) {
                     loadDeviceByPage(1);
                 } else if (result.statusCode === 401) {
-                    window.location.href = "/deviceviewer/views/login.html";
+                    window.location.href = "../views/login.html";
                 } else {
                     toast(result.msg);
                 }
@@ -246,13 +255,13 @@ function releaseDevice() {
 function getToken() {
     $.get(
         {
-            url: "/deviceviewer/user/getToken",
+            url: "../user/getToken",
             dataType: "json",
             success: function (result) {
                 if (result.statusCode === 200) {
                     $(".caret").before(result.token);
                 } else if (result.statusCode === 401) {
-                    window.location.href = "/deviceviewer/views/login.html";
+                    window.location.href = "../views/login.html";
                 } else {
                     toast(result.msg);
                 }
@@ -263,10 +272,10 @@ function getToken() {
 function logout() {
     $.get(
         {
-            url: "/deviceviewer/user/logout",
+            url: "../user/logout",
             dataType: "json",
             success: function (result) {
-                window.location.href = "/deviceviewer/views/login.html";
+                window.location.href = "../views/login.html";
             }
 
         }
@@ -280,14 +289,14 @@ function loadLogByDeviceId(deviceId, logNum, controllerIPs) {
     };
     $.get(
         {
-            url: "/deviceviewer/device/loadLog",
+            url: "../device/loadLog",
             dataType: "json",
             data: data,
             success: function (result) {
                 if (result.statusCode === 200) {
                     refreshDeviceLog(result.data, controllerIPs);
                 } else if (result.statusCode === 401) {
-                    window.location.href = "/deviceviewer/views/login.html";
+                    window.location.href = "../views/login.html";
                 } else {
                     toast(result.msg);
                 }

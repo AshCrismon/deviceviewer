@@ -19,13 +19,13 @@ function login() {
     var data = {"username": username, "password": password};
     $.post(
         {
-            url: "/deviceviewer/user/login",
+            url: "../user/login",
             data: data,
             dataType: "json",
             success: function (result) {
                 if (result.statusCode === 200) {
                     console.log("login success!");
-                    window.location.href = "/deviceviewer/views/index.html";
+                    window.location.href = "../views/index.html";
                 } else {
                     console.log("login failed!");
                     toast(result.msg);
@@ -42,5 +42,6 @@ function validate(username, password){
     }
     return;
 }
+
 
 

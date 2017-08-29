@@ -3,11 +3,16 @@
 <head>
     <meta http-equiv="content-Type" content="text/html; charset=utf-8"/>
     <!-- CSS -->
-    <link rel="stylesheet" href="/deviceviewer/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="/deviceviewer/css/bootstrap-datetimepicker.min.css"/>
-    <link rel="stylesheet" href="/deviceviewer/css/index.css"/>
-    <link rel="stylesheet" href="/deviceviewer/css/toast.css">
-    <title>首页</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" href="../css/index.css"/>
+    <link rel="stylesheet" href="../css/toast.css">
+    <link rel="stylesheet" href="../css/jrange/jquery.range.css">
+    <link rel="stylesheet" href="../css/jrange/time-slidebar.css">
+
+    <!-- Favicon and touch icons -->
+    <link rel="shortcut icon" href="../ico/favicon.png">
+    <title>iBook</title>
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -21,7 +26,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Device Viewer</a>
+            <a class="navbar-brand" href="#">iBook</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -95,67 +100,55 @@
                 <form class="form-horizontal">
                     <div class="form-group field-hidden">
                         <label class="col-sm-2 control-label">设备ID</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <span class="form-control device-id"></span>
                         </div>
                     </div>
                     <div class="form-group field-hidden">
                         <label class="col-sm-2 control-label">申请或解除占用</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <span class="form-control device-applyOrNot"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">设备类型</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <span class="form-control device-type"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">设备名</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <span class="form-control device-name"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">设备组</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <span class="form-control device-group"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">主机IPs</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <span class="form-control device-host-ips"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">控制器IPs</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <span class="form-control device-controller-ips"></span>
                         </div>
                     </div>
                     <div class="form-group form-time">
-                        <label class="col-sm-2 control-label">起始时间</label>
-                        <div class="col-sm-6">
-                            <div class="input-group date form-datetime" data-date="">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                <input class="form-control input-begin-time" size="16" type="text" value="" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group form-time">
-                        <label class="col-sm-2 control-label">结束时间</label>
-                        <div class="col-sm-6">
-                            <div class="input-group date form-datetime" data-date="">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                                <input class="form-control input-end-time" size="16" type="text" value="" />
-                            </div>
+                        <label class="col-sm-2 control-label">起止时间</label>
+                        <div class="col-sm-7 div-time-slidebar">
+                            <span class="form-control time-slidebar"></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">备注</label>
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                             <span class="form-control device-note"></span>
                         </div>
                     </div>
@@ -199,12 +192,16 @@
     </div>
 </div>
 
-<script src="/deviceviewer/js/jquery-2.2.2.min.js"></script>
-<script src="/deviceviewer/js/bootstrap.min.js"></script>
-<script src="/deviceviewer/js/bootstrap-datetimepicker.min.js"></script>
-<script src="/deviceviewer/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="/deviceviewer/js/index.js"></script>
-<script src="/deviceviewer/js/toast.js"></script>
-<script src="/deviceviewer/js/paginate.js"></script>
+<script src="../js/jquery-2.2.2.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../js/jrange/jquery.range-min.js"></script>
+<script src="../js/moment.js"></script>
+<script src="../js/jrange/time-slidebar.js"></script>
+<script src="../js/index.js"></script>
+<script src="../js/toast.js"></script>
+<script src="../js/paginate.js"></script>
+
 </body>
 </html>
