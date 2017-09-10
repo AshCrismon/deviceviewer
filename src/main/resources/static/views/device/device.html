@@ -2,22 +2,22 @@
     <div class="panel-heading">设备信息</div>
     <table class="table table-stripped table-hover table-device">
         <thead>
-        <th>ID</th>
-        <th>设备类型</th>
-        <th>设备名</th>
-        <th>设备组</th>
-        <th>主机IPs</th>
-        <th>控制器IPs</th>
-        <th>状态</th>
-        <th>占用人姓名</th>
-        <th>占用人工号</th>
-        <th>起始时间</th>
-        <th>结束时间</th>
+        <th ng-click="col='deviceId';desc=!desc">ID</th>
+        <th ng-click="col='deviceType';desc=!desc">设备类型</th>
+        <th ng-click="col='deviceName';desc=!desc">设备名</th>
+        <th ng-click="col='deviceGroup';desc=!desc">设备组</th>
+        <th ng-click="col='deviceHostIps';desc=!desc">主机IPs</th>
+        <th ng-click="col='deviceControllerIps';desc=!desc">控制器IPs</th>
+        <th ng-click="col='occupancyState';desc=!desc">状态</th>
+        <th ng-click="col='occupierName';desc=!desc">占用人姓名</th>
+        <th ng-click="col='occupierUsername';desc=!desc">占用人工号</th>
+        <th ng-click="col='beginTime';desc=!desc">起始时间</th>
+        <th ng-click="col='endTime';desc=!desc">结束时间</th>
         <th>备注</th>
         <th>操作</th>
         </thead>
         <tbody>
-        <tr ng-repeat="device in deviceList" ng-class="{ highlight: device.highlight }">
+        <tr ng-repeat="device in deviceList | orderBy:col:desc" ng-class="{ highlight: device.highlight }">
             <td class="td-deviceId">{{ device.deviceId }}</td>
             <td class="td-deviceType">{{ device.deviceType }}</td>
             <td class="td-deviceName">{{ device.deviceName }}</td>

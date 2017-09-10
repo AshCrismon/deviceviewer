@@ -1,3 +1,7 @@
+body{
+    font-family: Consolas, "宋体" !important;
+}
+
 div.container{
     margin-left: 2% !important;
 }
@@ -14,8 +18,13 @@ table {
     word-wrap: break-word !important;
 }
 
+table thead{
+    background-color: #DBDBDB !important;
+}
+
 table thead th {
     font-weight: bold !important;
+    cursor: pointer !important;
 }
 
 table thead th,
@@ -105,3 +114,8 @@ a.adisabled {
 a.adisabled:hover { text-decoration: none !important; }
 a.adisabled:focus { text-decoration: none !important; }
 a.adisabled:active { text-decoration: none !important; }
+
+.span-hostAccount,
+.span-controllerAccount{
+    color: darkcyan !important;
+}

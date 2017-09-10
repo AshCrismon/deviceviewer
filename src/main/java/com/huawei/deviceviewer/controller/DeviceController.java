@@ -128,7 +128,7 @@ public class DeviceController {
 
             if ("CI".equals(device.getNote())){
                 deviceMap.put("highlight", true);
-                deviceMap.put("readOnly", true);
+//                deviceMap.put("readOnly", true);
             }
             deviceList.add(deviceMap);
         }
