@@ -1,4 +1,4 @@
-package com.huawei.deviceviewer.entity;
+package com.huawei.deviceviewer.entity.log;
 
 import com.huawei.deviceviewer.utils.DateUtils;
 

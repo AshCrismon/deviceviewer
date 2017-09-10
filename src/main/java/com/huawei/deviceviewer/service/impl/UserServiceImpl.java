@@ -1,15 +1,13 @@
 package com.huawei.deviceviewer.service.impl;
 
 import com.huawei.deviceviewer.dao.UserDao;
-import com.huawei.deviceviewer.entity.User;
+import com.huawei.deviceviewer.entity.user.User;
 import com.huawei.deviceviewer.exception.DuplicateAccountException;
-import com.huawei.deviceviewer.exception.EmptyArgumentException;
 import com.huawei.deviceviewer.exception.IncorrectCredentialsException;
 import com.huawei.deviceviewer.exception.UnknownAccountException;
 import com.huawei.deviceviewer.service.UserService;
 import com.huawei.deviceviewer.utils.PasswordHelper;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +27,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void insertUser(User user) {
-        validateUser(user);
+        checkIfExists(user.getUsername());
         byte[] salt = PasswordHelper.createSalt();
         byte[] encryptedPassword = PasswordHelper.encrypt(user.getPassword(), salt);
         user.setSalt(Base64.encodeBase64String(salt));
@@ -39,12 +37,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteUser(int userId) {
-
+        userDao.delete(userId);
     }
 
     @Override
     public void updateUser(User user) {
-
+        userDao.update(user);
     }
 
     @Override
@@ -59,18 +57,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> loadAll() {
-        return null;
+        return userDao.loadAll();
     }
 
     @Override
     public void loginVerify(String username, String password) {
-        if(StringUtils.isAnyBlank(username, password)){
-            throw new EmptyArgumentException("用户名或密码不能为空");
-        }
-        validateUser(username, password);
+        checkUsernameAndPassword(username, password);
     }
 
-    public void validateUser(String username, String password) {
+    private void checkUsernameAndPassword(String username, String password) {
         User user = userDao.loadByUsername(username);
         if(null == user){
             throw new UnknownAccountException();
@@ -83,11 +78,8 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    public void validateUser(User user){
-        if (StringUtils.isAnyBlank(user.getName(), user.getUsername(), user.getPassword())){
-            throw new EmptyArgumentException("姓名、用户名和密码等不能为空！");
-        }
-        if(null != userDao.loadByUsername(user.getUsername())){
+    private void checkIfExists(String username){
+        if(null != userDao.loadByUsername(username)){
             throw new DuplicateAccountException();
         }
     }

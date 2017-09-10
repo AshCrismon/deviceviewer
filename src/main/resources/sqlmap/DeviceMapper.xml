@@ -18,11 +18,15 @@
 		<result property="note" column="Note" />
 		<result property="hostAccount" column="HostAccount" />
 		<result property="controllerAccount" column="controllerAccount" />
-		<result property="isOccupied" column="IsOccupied" />
+		<result property="occupancyState" column="OccupancyState" />
 		<result property="status" column="Status" />
 	</resultMap>
 
 	<insert id="insert" parameterType="Device">
+		<selectKey keyProperty="id" resultType="int">
+			select LAST_INSERT_ID()
+		</selectKey>
+
 		INSERT INTO DV_Device
 		(
 			DeviceName,
@@ -36,7 +40,7 @@
 			Note,
 			HostAccount,
 			ControllerAccount,
-			IsOccupied,
+			OccupancyState,
 			Status
 		)
 		VALUES
@@ -52,7 +56,7 @@
 			#{note},
 			#{hostAccount},
 			#{controllerAccount},
-			#{isOccupied},
+			#{occupancyState},
 			#{status}
 		)
 	</insert>
@@ -75,7 +79,7 @@
 		Note=#{note},
 		HostAccount=#{hostAccount},
 		ControllerAccount=#{controllerAccount},
-		IsOccupied=#{isOccupied},
+		OccupancyState=#{occupancyState},
 		Status=#{status}
 		WHERE ID=#{id}
 	</update>

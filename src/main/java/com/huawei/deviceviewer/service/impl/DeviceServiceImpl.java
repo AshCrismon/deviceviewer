@@ -1,13 +1,11 @@
 package com.huawei.deviceviewer.service.impl;
 
 import com.huawei.deviceviewer.dao.DeviceDao;
-import com.huawei.deviceviewer.entity.Device;
-import com.huawei.deviceviewer.entity.Page;
-import com.huawei.deviceviewer.exception.EmptyArgumentException;
-import com.huawei.deviceviewer.exception.EntityNotFoundException;
-import com.huawei.deviceviewer.exception.InvalidTimeRangeException;
+import com.huawei.deviceviewer.entity.device.Device;
+import com.huawei.deviceviewer.entity.device.DeviceState;
+import com.huawei.deviceviewer.entity.common.MessageTip;
+import com.huawei.deviceviewer.entity.common.Page;
 import com.huawei.deviceviewer.service.DeviceService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,25 +25,23 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Override
     public void insertDevice(Device device) {
-        validateArgument(device);
         deviceDao.insert(device);
     }
 
     @Override
     public void deleteDevice(int deviceId) {
-        validateIfExists(deviceId);
         deviceDao.delete(deviceId);
     }
 
     @Override
     public void updateDevice(Device device) {
-        validateArgument(device);
+        checkIfExists(device.getId());
         deviceDao.update(device);
     }
 
     @Override
     public Device loadDeviceById(int deviceId) {
-        return validateIfExists(deviceId);
+        return checkIfExists(deviceId);
     }
 
     @Override
@@ -55,7 +51,7 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Override
     public Page<Device> loadDevicesByPage(int pageNo, int pageSize) {
-        Page<Device> devicePage = new Page<>();
+        Page<Device> devicePage = new Page<Device>();
         int start = (pageNo - 1) * pageSize;
         int count = deviceDao.count();
         List<Device> deviceList = deviceDao.loadPage(start, pageSize);
@@ -69,10 +65,11 @@ public class DeviceServiceImpl implements DeviceService{
 
     @Override
     public void applyDevice(int deviceId, String username, String beginTime, String endTime) {
-        Device device = validateIfExists(deviceId);
-        validateIfOccupied(device);
-        validateTimeRange(beginTime, endTime);
-        device.setIsOccupied(1);
+        Device device = checkIfExists(deviceId);
+        checkOccupancyState(device.getOccupancyState());
+        checkTimeRange(beginTime, endTime);
+
+        device.setOccupancyState(DeviceState.OCCUPYING.value());
         device.setOccupier(username);
         device.setBeginTime(beginTime);
         device.setEndTime(endTime);
@@ -80,42 +77,32 @@ public class DeviceServiceImpl implements DeviceService{
     }
 
     @Override
-    public void cancelDevice(int deviceId, String username) {
-        Device device = validateIfExists(deviceId);
-        device.setIsOccupied(0);
+    public void releaseDevice(int deviceId, String username) {
+        Device device = checkIfExists(deviceId);
+        device.setOccupancyState(DeviceState.FREE.value());
         device.setOccupier("");
         device.setBeginTime("");
         device.setEndTime("");
         deviceDao.update(device);
     }
 
-
-    public void validateArgument(Device device) {
-        if(null == device){
-            throw new NullPointerException("设备信息不能为空 !");
-        }
-        if(StringUtils.isAnyBlank(device.getDeviceName(), device.getControllerIPs(), device.getDeviceType(), device.getDeviceHostIPs())) {
-            throw new EmptyArgumentException("设备名、设备类型、控制器IP和主机IP等不能为空！");
-        }
-    }
-
-    public Device validateIfExists(int deviceId) {
+    private Device checkIfExists(int deviceId) {
         Device device = deviceDao.load(deviceId);
         if(null == device){
-            throw new EntityNotFoundException("设备不存在！");
+            throw new RuntimeException(MessageTip.DEVICE_NOT_FOUND.value());
         }
         return device;
     }
 
-    public void validateIfOccupied(Device device){
-        if (1 == device.getIsOccupied()){
-            throw new RuntimeException("设备已经被占用 !");
+    private void checkOccupancyState(int occupancyState){
+        if (DeviceState.OCCUPYING.value() == occupancyState){
+            throw new RuntimeException(MessageTip.DEVICE_OCCUPYING.value());
         }
     }
 
-    public void validateTimeRange(String beginTime, String endTime){
+    private void checkTimeRange(String beginTime, String endTime){
         if (beginTime.compareTo(endTime) >= 0) {
-            throw new InvalidTimeRangeException("开始时间不能大于结束时间！");
+            throw new RuntimeException(MessageTip.INVALID_TIME_RANGE.value());
         }
     }
 

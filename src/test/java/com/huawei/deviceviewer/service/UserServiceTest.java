@@ -1,7 +1,7 @@
 package com.huawei.deviceviewer.service;
 
 import com.huawei.deviceviewer.config.AbstractTestConfig;
-import com.huawei.deviceviewer.entity.User;
+import com.huawei.deviceviewer.entity.user.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

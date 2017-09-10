@@ -1,8 +1,12 @@
 package com.huawei.deviceviewer.controller;
 
-import com.huawei.deviceviewer.entity.*;
-import com.huawei.deviceviewer.exception.EntityNotFoundException;
-import com.huawei.deviceviewer.exception.InvalidTimeRangeException;
+import com.huawei.deviceviewer.entity.log.Log;
+import com.huawei.deviceviewer.entity.common.MessageTip;
+import com.huawei.deviceviewer.entity.common.Page;
+import com.huawei.deviceviewer.entity.device.Device;
+import com.huawei.deviceviewer.entity.device.DeviceOps;
+import com.huawei.deviceviewer.entity.device.DeviceState;
+import com.huawei.deviceviewer.entity.user.User;
 import com.huawei.deviceviewer.service.DeviceService;
 import com.huawei.deviceviewer.service.LogService;
 import com.huawei.deviceviewer.service.UserService;
@@ -11,10 +15,7 @@ import com.huawei.deviceviewer.vo.MessageVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -29,8 +30,6 @@ import java.util.*;
 @RequestMapping("/device")
 public class DeviceController {
 
-    private final String SESSION_ID = "token";
-
     @Autowired
     private MessageVO message;
     @Autowired
@@ -40,52 +39,52 @@ public class DeviceController {
     @Autowired
     private LogService logService;
 
-    @RequestMapping("/list")
-    public MessageVO loadAllDevices(HttpSession session) {
-        String token = (String) session.getAttribute(SESSION_ID);
+    private String currentToken;
+
+    @RequestMapping(value = "/loadDevices", method = RequestMethod.GET)
+    public MessageVO loadAllDevices() {
         List<Device> deviceList = deviceService.loadAllDevices();
-        return renderMessage(wrapData(deviceList, token));
+        return renderMessage(deviceList);
     }
 
-    @RequestMapping("/loadPage/{pageNo}")
-    public MessageVO loadDevicesByPage(@PathVariable(value = "pageNo") int pageNo, HttpSession session) {
-
-        String token = (String) session.getAttribute(SESSION_ID);
-        Page<Device> devicePage = deviceService.loadDevicesByPage(pageNo, 20);
-        return renderMessage(wrapDevicePage(devicePage, wrapData(devicePage.getObjList(), token)));
+    @RequestMapping(value = "/loadDevices/{pageNo}", method = RequestMethod.GET)
+    public MessageVO loadDevicesByPage(@PathVariable(value = "pageNo") int pageNo,
+                                       @RequestParam(value = "pageSize", defaultValue = "20") int pageSize,
+                                       HttpSession session) {
+        currentToken = (String)session.getAttribute(UserController.SESSION_ID);
+        Page<Device> devicePage = deviceService.loadDevicesByPage(pageNo, pageSize);
+        return renderMessage(wrapData(devicePage));
     }
 
-    @RequestMapping("/apply")
+    @RequestMapping(value = "/applyDevice", method = RequestMethod.POST)
     public MessageVO applyDevice(@RequestParam(value = "deviceId") int deviceId,
                                  @RequestParam(value = "beginTime") String beginTime,
-                                 @RequestParam(value = "endTime") String endTime,
-                                 HttpSession session) throws EntityNotFoundException, InvalidTimeRangeException {
+                                 @RequestParam(value = "endTime") String endTime) {
 
-        String token = (String) session.getAttribute(SESSION_ID);
-        deviceService.applyDevice(deviceId, token, beginTime, endTime);
-        logService.insertLog(new Log(deviceId, token, ActionType.APPLY.value(), beginTime, endTime));
-        return renderMessage("设备申请成功！");
+        deviceService.applyDevice(deviceId, currentToken, beginTime, endTime);
+        log(deviceId, currentToken, DeviceOps.APPLY, beginTime, endTime);
+        return renderMessage(MessageTip.DEVICE_APPLY_SUCCESS);
     }
 
-    @RequestMapping("/release")
-    public MessageVO releaseDevice(@RequestParam(value = "deviceId") int deviceId, HttpSession session) {
-        String token = (String) session.getAttribute(SESSION_ID);
-        deviceService.cancelDevice(deviceId, token);
-        logService.insertLog(new Log(deviceId, token, ActionType.RELEASE.value()));
-        return renderMessage("设备成功释放！");
+    @RequestMapping(value = "/releaseDevice", method = RequestMethod.POST)
+    public MessageVO releaseDevice(@RequestParam(value = "deviceId") int deviceId) {
+        deviceService.releaseDevice(deviceId, currentToken);
+        log(deviceId, currentToken, DeviceOps.RELEASE, "", "");
+        return renderMessage(MessageTip.DEVICE_RELEASE_SUCCESS);
     }
 
-    @RequestMapping("/loadLog")
+    @RequestMapping(value = "/loadLogByDeviceId", method = RequestMethod.GET)
     public MessageVO loadLogByDeviceId(@RequestParam(value = "deviceId") int deviceId,
                                        @RequestParam(value = "logNum") int limit) {
         List<Log> logList = logService.loadByDeviceId(deviceId, limit);
         return renderMessage(logList);
     }
 
-    public List<Map<String, Object>> wrapData(List<Device> deviceList, String token) {
-        List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+    private Map<String, Object> wrapData(Page<Device> devicePage) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        List<Map<String, Object>> deviceList = new ArrayList<Map<String, Object>>();
 
-        for (Device device : deviceList) {
+        for (Device device : devicePage.getObjList()) {
             Map<String, Object> deviceMap = new HashMap<>();
             deviceMap.put("deviceId", device.getId());
             deviceMap.put("deviceType", device.getDeviceType());
@@ -93,10 +92,13 @@ public class DeviceController {
             deviceMap.put("deviceGroup", device.getDeviceGroup());
             deviceMap.put("deviceHostIPs", device.getDeviceHostIPs());
             deviceMap.put("controllerIPs", device.getControllerIPs());
-            deviceMap.put("isOccupied", device.getIsOccupied());
+            deviceMap.put("occupancyState", DeviceState.OCCUPYING.value() == device.getOccupancyState());
             deviceMap.put("occupierName", "");
             deviceMap.put("occupierUsername", device.getOccupier());
-            deviceMap.put("occupierIsMe", 0);
+            deviceMap.put("currentOccupier", false);
+            deviceMap.put("deviceOps", DeviceOps.APPLY.desc());
+            deviceMap.put("highlight", false);
+            deviceMap.put("readOnly", false);
             deviceMap.put("beginTime", device.getBeginTime());
             deviceMap.put("endTime", device.getEndTime());
             deviceMap.put("note", device.getNote());
@@ -107,41 +109,56 @@ public class DeviceController {
                 device.setBeginTime("");
                 device.setEndTime("");
                 device.setOccupier("");
-                device.setIsOccupied(0);
+                device.setOccupancyState(DeviceState.FREE.value());
                 deviceService.updateDevice(device);
             }
 
-            if (1 == device.getIsOccupied()) {
+            if (DeviceState.OCCUPYING.value() == device.getOccupancyState()) {
                 User user = userService.loadByUsername(device.getOccupier());
                 deviceMap.put("occupierName", user.getName());
                 deviceMap.put("occupierUsername", user.getUsername());
-                deviceMap.put("occupierIsMe", token.equals(device.getOccupier()) ? 1 : 0);
+
+                if(currentToken.equals(user.getUsername())){
+                    deviceMap.put("currentOccupier", true);
+                    deviceMap.put("deviceOps", DeviceOps.RELEASE.desc());
+                }else{
+                    deviceMap.put("readOnly", true);
+                }
             }
 
-            data.add(deviceMap);
+            if ("CI".equals(device.getNote())){
+                deviceMap.put("highlight", true);
+                deviceMap.put("readOnly", true);
+            }
+            deviceList.add(deviceMap);
         }
-        return data;
-
+        result.put("pageNo", devicePage.getPageNo());
+        result.put("pageSize", devicePage.getPageSize());
+        result.put("totalCount", devicePage.getTotalCount());
+        result.put("totalPages", devicePage.getTotalPages());
+        result.put("deviceList", deviceList);
+        result.put("deviceOps", DeviceOps.enumMap);
+        return result;
     }
 
-    public Map<String, Object> wrapDevicePage(Page<Device> devicePage, List<Map<String, Object>> deviceList) {
-
-        Map<String, Object> wrappedDevicePage = new HashMap<>();
-        wrappedDevicePage.put("pageNo", devicePage.getPageNo());
-        wrappedDevicePage.put("pageSize", devicePage.getPageSize());
-        wrappedDevicePage.put("totalCount", devicePage.getTotalCount());
-        wrappedDevicePage.put("totalPages", devicePage.getTotalPages());
-        wrappedDevicePage.put("deviceList", deviceList);
-        return wrappedDevicePage;
-    }
-
-    public boolean applyTimeExpired(String beginTime, String endTime) {
+    private boolean applyTimeExpired(String beginTime, String endTime) {
         return !StringUtils.isAnyBlank(beginTime, endTime) && DateUtils.beforeNow(endTime);
+    }
+
+    private void log(int deviceId, String username, DeviceOps ops, String beginTime, String endTime) {
+        logService.insertLog(new Log(deviceId, username, ops.value(), beginTime, endTime));
     }
 
     private MessageVO renderMessage(Object data) {
         message.setStatusCode(HttpStatus.OK.value());
         message.setData(data);
+        message.setMsg(MessageTip.SUCCESS.value());
+        return message;
+    }
+
+    private MessageVO renderMessage(MessageTip messageTip) {
+        message.setStatusCode(HttpStatus.OK.value());
+        message.setMsg(messageTip.value());
         return message;
     }
 

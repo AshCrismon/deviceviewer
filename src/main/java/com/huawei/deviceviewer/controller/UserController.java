@@ -1,6 +1,6 @@
 package com.huawei.deviceviewer.controller;
 
-import com.huawei.deviceviewer.entity.User;
+import com.huawei.deviceviewer.entity.user.User;
 import com.huawei.deviceviewer.service.UserService;
 import com.huawei.deviceviewer.vo.MessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/user")
 public class UserController {
 
-    private final String SESSION_ID = "token";
+    public static final String SESSION_ID = "token";
 
     @Autowired
     private MessageVO message;

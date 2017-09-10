@@ -1,7 +1,7 @@
 package com.huawei.deviceviewer.service;
 
-import com.huawei.deviceviewer.entity.Device;
-import com.huawei.deviceviewer.entity.Page;
+import com.huawei.deviceviewer.entity.device.Device;
+import com.huawei.deviceviewer.entity.common.Page;
 
 import java.util.List;
 
@@ -27,5 +27,5 @@ public interface DeviceService {
 
     public void applyDevice(int deviceId, String username, String beginTime, String endTime);
 
-    public void cancelDevice(int deviceId, String username);
+    public void releaseDevice(int deviceId, String username);
 }

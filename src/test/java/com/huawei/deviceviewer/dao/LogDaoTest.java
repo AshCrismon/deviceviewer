@@ -1,7 +1,7 @@
 package com.huawei.deviceviewer.dao;
 
 import com.huawei.deviceviewer.config.AbstractTestConfig;
-import com.huawei.deviceviewer.entity.Log;
+import com.huawei.deviceviewer.entity.log.Log;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,6 +29,5 @@ public class LogDaoTest extends AbstractTestConfig {
     @Test
     public void testLoadByDeviceId(){
         List<Log> logList = logDao.loadByDeviceId(1, 10);
-        print(logList);
     }
 }

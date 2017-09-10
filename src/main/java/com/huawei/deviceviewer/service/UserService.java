@@ -1,6 +1,6 @@
 package com.huawei.deviceviewer.service;
 
-import com.huawei.deviceviewer.entity.User;
+import com.huawei.deviceviewer.entity.user.User;
 
 import java.util.List;
 

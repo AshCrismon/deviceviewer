@@ -17,6 +17,10 @@
     </resultMap>
 
     <insert id="insert" parameterType="Log">
+        <selectKey keyProperty="id" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+
         INSERT INTO DV_Log
         (
             DeviceId,

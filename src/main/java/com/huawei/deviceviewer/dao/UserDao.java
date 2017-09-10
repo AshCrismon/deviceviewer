@@ -1,6 +1,6 @@
 package com.huawei.deviceviewer.dao;
 
-import com.huawei.deviceviewer.entity.User;
+import com.huawei.deviceviewer.entity.user.User;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.huawei.deviceviewer.service.impl;
 
 import com.huawei.deviceviewer.dao.LogDao;
-import com.huawei.deviceviewer.entity.Log;
+import com.huawei.deviceviewer.entity.log.Log;
 import com.huawei.deviceviewer.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

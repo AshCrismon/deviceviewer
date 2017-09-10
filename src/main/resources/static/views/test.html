@@ -3,23 +3,121 @@
 <head>
     <meta http-equiv="content-Type" content="text/html; charset=utf-8" />
     <!-- CSS -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../css/bootstrap-datetimepicker.min.css"/>
-    <link rel="stylesheet" href="../css/index.css"/>
-    <link rel="stylesheet" href="../css/toast.css">
-    <link rel="stylesheet" href="../css/jrange/jquery.range.css">
+    <link rel="stylesheet" href="/ibook/css/bootstrap/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/ibook/css/index.css"/>
+    <link rel="stylesheet" href="/ibook/css/toast.css">
+    <link rel="stylesheet" href="/ibook/css/jrange/jquery.range.css">
+    <link rel="stylesheet" href="/ibook/css/jrange/time-slidebar.css">
     <title>test page</title>
 </head>
 <body>
-    <div style="margin: 50px 50%">
-        <input type="hidden" id="test"/>
-    </div>
-    <script src="../js/jquery-2.2.2.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/bootstrap-datetimepicker.min.js"></script>
-    <script src="../js/jrange/jquery.range-min.js"></script>
-    <script src="../js/moment.js"></script>
+    <div ng-app="pageBody" ng-controller="devicePageCtrl">
 
+    <div>
+        <div class="panel panel-default">
+            <div class="panel-heading">设备信息</div>
+            <table class="table table-stripped table-hover table-device">
+                <thead>
+                <th style="width:2%">ID</th>
+                <th style="width:10%">设备类型</th>
+                <th style="width:15%">设备名</th>
+                <th style="width:5%">设备组</th>
+                <th style="width:10%">主机IPs</th>
+                <th style="width:10%">控制器IPs</th>
+                <th style="width:3%">状态</th>
+                <th style="width:7%">占用人姓名</th>
+                <th style="width:7%">占用人工号</th>
+                <th style="width:8%">起始时间</th>
+                <th style="width:8%">结束时间</th>
+                <th style="width:5%">备注</th>
+                <th style="width:10%">操作</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="device in deviceList">
+                    <td>{{ device.deviceId }}</td>
+                    <td>{{ device.deviceType }}</td>
+                    <td>{{ device.deviceName }}</td>
+                    <td>{{ device.deviceGroup }}</td>
+                    <td>{{ device.deviceHostIPs }} <br/> {{ device.hostAccount }}</td>
+                    <td>{{ device.controllerIPs }} <br/> {{device.controllerAccount}}</td>
+                    <td>
+                        <div ng-class="{circle-red: occupancyState, circle-green: !occupancyState}"></div>
+                    </td>
+                    <td>{{ device.occupierUsername }}</td>
+                    <td>{{ device.occupierName }}</td>
+                    <td>{{ device.beginTime }}</td>
+                    <td>{{ device.endTime }}</td>
+                    <td>{{ device.note }}</td>
+                    <td>
+                        <a class="btn btn-info btn-apply" style="width:62px;" data-backdrop="false" data-toggle="modal"
+                           data-target="#modal-device"></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-log" style="width:82px;" data-backdrop="false" data-toggle="modal"
+                           data-target="#modal-device-log"></a>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+    <script src="/ibook/js/jquery/jquery-2.2.2.min.js"></script>
+    <script src="/ibook/js/bootstrap/bootstrap.min.js"></script>
+    <script src="/ibook/js/jrange/jquery.range-min.js"></script>
+    <script src="/ibook/js/moment/moment.js"></script>
+    <script src="/ibook/js/jrange/time-slidebar.js"></script>
+    <script src="/ibook/js/angular/angular.min.js"></script>
+
+    <script>
+
+        angular.module('pageBody', [])
+            .controller('devicePageCtrl',
+                function ($scope, $http) {
+                    loadDeviceByPage($http, $scope);
+                }
+            );
+
+        function loadDeviceByPage($http, $scope, pageNo) {
+            if (undefined === pageNo) {
+                pageNo = 1;
+            }
+            var url = '/ibook/device/loadDevices/' + pageNo;
+            $http.get(url).then(
+                function (result) {
+                    /**
+                     * result: {
+                     *      data: {
+                     *          statusCode: ,
+                     *          msg: ,
+                     *          token: ,
+                     *          data: {
+                     *
+                     *              pageNo: ,
+                     *              totalPages: ,
+                     *          }
+                     *      }
+                     * }
+                     */
+//                    $('.table-device tbody').children().remove();
+                    var data = result.data;
+                    if (data.statusCode === 200) {
+                        $scope.deviceList = data.data.deviceList;
+                    } else if (result.statusCode === 401) {
+                        window.location.href = '/ibook/views/login.html';
+                    } else {
+                        toast(result.msg);
+                    }
+                }
+            );
+
+        }
+
+    </script>
 
 </body>
 </html>

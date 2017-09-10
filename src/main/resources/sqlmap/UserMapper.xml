@@ -7,15 +7,18 @@
 
     <resultMap id="user" type="User">
         <id property="id" column="ID"/>
+        <result property="name" column="Name"/>
         <result property="username" column="Username"/>
-        <result property="name" column="Username"/>
         <result property="password" column="Password"/>
         <result property="salt" column="Salt"/>
         <result property="status" column="Status"/>
-        <result property="name" column="Name"/>
     </resultMap>
 
     <insert id="insert" parameterType="User">
+        <selectKey keyProperty="id" resultType="int">
+            select LAST_INSERT_ID()
+        </selectKey>
+
         INSERT INTO DV_User
         (
             Username,
@@ -45,7 +48,7 @@
         Name=#{name},
         Password=#{password},
         Salt=#{salt},
-        Status=#{status},
+        Status=#{status}
         WHERE ID=#{id}
     </update>
 

@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/user/register")
                 .excludePathPatterns("/")
                 .addPathPatterns("/**")
-//                .excludePathPatterns("/user/register")
+                .excludePathPatterns("/user/register")
         ;
     }
 

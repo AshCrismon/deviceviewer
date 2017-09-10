@@ -1,12 +1,12 @@
-package com.huawei.deviceviewer.entity;
+package com.huawei.deviceviewer.entity.common;
 
 import java.util.List;
 
 /**
  * Created by Intellij IDEA.
- * Author: hadoop
+ * Author: Yadi.Sun
  * Date: 2017/8/6
- * Email: yadysun@gmail.com
+ * Email: sunyadi@gmail.com
  */
 public class Page<T> {
 
@@ -54,5 +54,16 @@ public class Page<T> {
 
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
+    }
+
+    @Override
+    public String toString() {
+        return "Page{" +
+                "pageNo=" + pageNo +
+                ", pageSize=" + pageSize +
+                ", totalCount=" + totalCount +
+                ", totalPages=" + totalPages +
+                ", objList=" + objList +
+                '}';
     }
 }

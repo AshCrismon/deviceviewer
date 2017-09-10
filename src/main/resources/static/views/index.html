@@ -3,15 +3,14 @@
 <head>
     <meta http-equiv="content-Type" content="text/html; charset=utf-8"/>
     <!-- CSS -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../css/bootstrap-datetimepicker.min.css"/>
-    <link rel="stylesheet" href="../css/index.css"/>
-    <link rel="stylesheet" href="../css/toast.css">
-    <link rel="stylesheet" href="../css/jrange/jquery.range.css">
-    <link rel="stylesheet" href="../css/jrange/time-slidebar.css">
+    <link rel="stylesheet" href="/ibook/css/bootstrap/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/ibook/css/jrange/jquery.range.css">
+    <link rel="stylesheet" href="/ibook/css/toast.css">
+    <link rel="stylesheet" href="/ibook/css/jrange/time-slidebar.css">
+    <link rel="stylesheet" href="/ibook/css/index.css"/>
 
     <!-- Favicon and touch icons -->
-    <link rel="shortcut icon" href="../ico/favicon.png">
+    <link rel="shortcut icon" href="/ico/favicon.png">
     <title>iBook</title>
 </head>
 <body>
@@ -36,9 +35,10 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="logout">退出</a></li>
+                        <li><a class="logout" onclick="logout()">退出</a></li>
                     </ul>
                 </li>
             </ul>
@@ -46,162 +46,21 @@
     </div>
 </nav>
 <div class="alert alert-danger" role="alert"></div>
-<div class="panel panel-default">
-    <div class="panel-heading">设备信息</div>
-    <table class="table table-stripped table-hover table-device">
-        <thead>
-        <th style="width:2%">ID</th>
-        <th style="width:10%">设备类型</th>
-        <th style="width:15%">设备名</th>
-        <th style="width:5%">设备组</th>
-        <th style="width:10%">主机IPs</th>
-        <th style="width:10%">控制器IPs</th>
-        <th style="width:3%">状态</th>
-        <th style="width:7%">占用人姓名</th>
-        <th style="width:7%">占用人工号</th>
-        <th style="width:8%">起始时间</th>
-        <th style="width:8%">结束时间</th>
-        <th style="width:5%">备注</th>
-        <th style="width:10%">操作</th>
-        </thead>
-        <tbody>
-        </tbody>
-        <tfoot>
-        </tfoot>
-    </table>
 
-</div>
-<nav class="page">
-    <ul class="pagination">
-        <li>
-            <a aria-label="Previous" class="previous">
-                <span aria-hidden="true">上一页</span>
-            </a>
-        </li>
-        <li>
-            <a aria-label="Next" class="next">
-                <span aria-hidden="true">下一页</span>
-            </a>
-        </li>
-    </ul>
-</nav>
-
-<div class="modal fade" id="modal-device">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close btn-close" data-dismiss="modal">
-                    <span>x</span>
-                    <span class="sr-only">关闭</span>
-                </button>
-                <h4 class="modal-title">设备信息</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="form-group field-hidden">
-                        <label class="col-sm-2 control-label">设备ID</label>
-                        <div class="col-sm-7">
-                            <span class="form-control device-id"></span>
-                        </div>
-                    </div>
-                    <div class="form-group field-hidden">
-                        <label class="col-sm-2 control-label">申请或解除占用</label>
-                        <div class="col-sm-7">
-                            <span class="form-control device-applyOrNot"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">设备类型</label>
-                        <div class="col-sm-7">
-                            <span class="form-control device-type"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">设备名</label>
-                        <div class="col-sm-7">
-                            <span class="form-control device-name"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">设备组</label>
-                        <div class="col-sm-7">
-                            <span class="form-control device-group"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">主机IPs</label>
-                        <div class="col-sm-7">
-                            <span class="form-control device-host-ips"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">控制器IPs</label>
-                        <div class="col-sm-7">
-                            <span class="form-control device-controller-ips"></span>
-                        </div>
-                    </div>
-                    <div class="form-group form-time">
-                        <label class="col-sm-2 control-label">起止时间</label>
-                        <div class="col-sm-7 div-time-slidebar">
-                            <span class="form-control time-slidebar"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">备注</label>
-                        <div class="col-sm-7">
-                            <span class="form-control device-note"></span>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-default btn-ok" data-dismiss="modal">确定</button>
-            </div>
-        </div>
-    </div>
+<div ng-app="pageBody" ng-controller="devicePageCtrl">
+    <div ng-include="'device/device.html'"></div>
 </div>
 
-<div class="modal fade" id="modal-device-log">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close btn-close" data-dismiss="modal">
-                    <span>x</span>
-                    <span class="sr-only">关闭</span>
-                </button>
-                <h4 class="modal-title">设备日志 ( <span class="device-identifier"></span> )</h4>
-            </div>
-            <div class="modal-body">
-                <table class="table table-stripped table-hover table-device-log">
-                    <thead>
-                    <th>时间</th>
-                    <th>用户</th>
-                    <th>操作类型</th>
-                    <th>开始时间</th>
-                    <th>结束时间</th>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="../js/jquery-2.2.2.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/bootstrap-datetimepicker.min.js"></script>
-<script src="../js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="../js/jrange/jquery.range-min.js"></script>
-<script src="../js/moment.js"></script>
-<script src="../js/jrange/time-slidebar.js"></script>
-<script src="../js/index.js"></script>
-<script src="../js/toast.js"></script>
-<script src="../js/paginate.js"></script>
+<script src="/ibook/js/jquery/jquery-2.2.2.min.js"></script>
+<script src="/ibook/js/bootstrap/bootstrap.min.js"></script>
+<script src="/ibook/js/jrange/jquery.range-min.js"></script>
+<script src="/ibook/js/moment/moment.js"></script>
+<script src="/ibook/js/angular/angular.min.js"></script>
+<script src="/ibook/js/jrange/time-slidebar.js"></script>
+<script src="/ibook/js/index.js"></script>
+<script src="/ibook/js/toast.js"></script>
+<script src="/ibook/js/paginate.js"></script>
+<script src="/ibook/js/device/device.js"></script>
 
 </body>
 </html>

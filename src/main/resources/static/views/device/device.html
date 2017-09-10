@@ -1,0 +1,192 @@
+<div class="panel panel-default">
+    <div class="panel-heading">设备信息</div>
+    <table class="table table-stripped table-hover table-device">
+        <thead>
+        <th>ID</th>
+        <th>设备类型</th>
+        <th>设备名</th>
+        <th>设备组</th>
+        <th>主机IPs</th>
+        <th>控制器IPs</th>
+        <th>状态</th>
+        <th>占用人姓名</th>
+        <th>占用人工号</th>
+        <th>起始时间</th>
+        <th>结束时间</th>
+        <th>备注</th>
+        <th>操作</th>
+        </thead>
+        <tbody>
+        <tr ng-repeat="device in deviceList" ng-class="{ highlight: device.highlight }">
+            <td class="td-deviceId">{{ device.deviceId }}</td>
+            <td class="td-deviceType">{{ device.deviceType }}</td>
+            <td class="td-deviceName">{{ device.deviceName }}</td>
+            <td class="td-deviceGroup">{{ device.deviceGroup }}</td>
+            <td>
+                <span class="span-deviceHostIps">{{ device.deviceHostIPs }}</span>
+                <br/>
+                <span class="span-hostAccount">{{ device.hostAccount }}</span>
+            </td>
+            <td>
+                <span class="span-controllerIps">{{ device.controllerIPs }}</span>
+                <br/>
+                <span class="span-controllerAccount">{{device.controllerAccount}}</span>
+            </td>
+            <td class="td-occupancyState">
+                <div ng-class="{ true: 'circle-red', false: 'circle-green' }[device.occupancyState]"></div>
+            </td>
+            <td class="td-occupierUsername">{{ device.occupierUsername }}</td>
+            <td class="td-occupierName">{{ device.occupierName }}</td>
+            <td class="td-beginTime">{{ device.beginTime }}</td>
+            <td class="td-endTime">{{ device.endTime }}</td>
+            <td class="td-deviceNote">{{ device.note }}</td>
+            <td>
+                <a class="btn btn-device-ops" data-backdrop="false" data-toggle="modal"
+                   data-target="#modal-device-info"
+                   ng-class="{ 'disabled': device.readOnly, 'btn-success': device.currentOccupier, 'btn-info': !device.currentOccupier }"
+                   ng-click="refreshDeviceModal($event.target)">
+                    {{ device.deviceOps }}
+                </a>
+                <a class="btn btn-log" data-backdrop="false" data-toggle="modal"
+                   data-target="#modal-device-log"
+                   ng-class="{ true: 'btn-success', false: 'btn-info' }[device.currentOccupier]"
+                   ng-click="loadLogOfDevice($event.target)">
+                    日志
+                </a>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+</div>
+
+<nav class="page">
+    <ul class="pagination">
+        <li>
+            <a aria-label="Previous" class="previous" ng-class="{ adisabled: pagination.previous.disabled }"
+               ng-click="loadDeviceByPage(pagination.previous.pageNo)">
+                <span aria-hidden="true">上一页</span>
+            </a>
+        </li>
+        <li ng-repeat="page in pagination.pages" ng-class="{ active: page.isActive }">
+            <a ng-click="loadDeviceByPage(page.pageNo)">{{ page.pageNo }}</a>
+        </li>
+        <li>
+            <a aria-label="Next" href="#" class="next" ng-class="{ adisabled: pagination.next.disabled }"
+               ng-click="loadDeviceByPage(pagination.next.pageNo)">
+                <span aria-hidden="true">下一页</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="modal fade" id="modal-device-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close btn-close" data-dismiss="modal">
+                    <span>x</span>
+                    <span class="sr-only">关闭</span>
+                </button>
+                <h4 class="modal-title">设备信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group field-hidden">
+                        <label class="col-sm-2 control-label">设备ID</label>
+                        <div class="col-sm-7">
+                            <span class="form-control modal-device-id">{{ deviceModal.deviceId }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">设备类型</label>
+                        <div class="col-sm-7">
+                            <span class="form-control modal-device-type">{{ deviceModal.deviceType }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">设备名</label>
+                        <div class="col-sm-7">
+                            <span class="form-control modal-device-name">{{ deviceModal.deviceName }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">设备组</label>
+                        <div class="col-sm-7">
+                            <span class="form-control modal-device-group">{{ deviceModal.deviceGroup }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">主机IPs</label>
+                        <div class="col-sm-7">
+                            <span class="form-control modal-device-hostIps">{{ deviceModal.deviceHostIPs }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">控制器IPs</label>
+                        <div class="col-sm-7">
+                            <span class="form-control modal-device-controllerIps">{{ deviceModal.controllerIPs }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group form-time">
+                        <label class="col-sm-2 control-label">起止时间</label>
+                        <div class="col-sm-7 div-time-slidebar">
+                            <span class="form-control time-slidebar"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-7">
+                            <span class="form-control modal-device-note">{{ deviceModal.note }}</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" value="{{ deviceModal.deviceOps }}"
+                        ng-click="operationDevice($event.target)">确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-device-log">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close btn-close" data-dismiss="modal">
+                    <span>x</span>
+                    <span class="sr-only">关闭</span>
+                </button>
+                <h4 class="modal-title">设备日志 ( <span class="device-identifier">{{ logModal.controllerIPs }}</span> )
+                </h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-stripped table-hover table-device-log">
+                    <thead>
+                    <th>时间</th>
+                    <th>用户</th>
+                    <th>操作类型</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="log in logModal.logList">
+                        <td>{{ log.createTime }}</td>
+                        <td>{{ log.username }}</td>
+                        <td>{{ log.actionType == 1 ? "申请": "释放" }}</td>
+                        <td>{{ log.beginTime }}</td>
+                        <td>{{ log.endTime }}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>

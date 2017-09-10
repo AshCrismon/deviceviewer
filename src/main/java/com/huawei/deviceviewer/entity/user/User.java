@@ -1,4 +1,7 @@
-package com.huawei.deviceviewer.entity;
+package com.huawei.deviceviewer.entity.user;
+
+import com.huawei.deviceviewer.entity.EntityState;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Created by Intellij IDEA.
@@ -8,11 +11,15 @@ package com.huawei.deviceviewer.entity;
  */
 public class User {
     private int id;
-    private String name = "";
-    private String username = "";
-    private String password = "";
-    private int status = 1;
+    @NotBlank(message="{user.name}")
+    private String name;
+    @NotBlank(message="{user.username}")
+    private String username;
+    @NotBlank(message="{user.password}")
+    private String password;
+
     private String salt = "";
+    private int status = EntityState.NORMAL.value();
 
     public User(){}
     public User(String name, String username, String password) {
